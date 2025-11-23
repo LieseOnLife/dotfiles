@@ -35,6 +35,7 @@ Replacing standard Unix tools with modern alternatives:
 - **Auto-detecting Git workflows** - Automatically detects whether your repo uses `main` or `master`
 - **Auto-branch push** - Push commands automatically detect your current branch
 - **Quick config editing** - One-command access to edit any config file
+- **iTerm2 auto-sync** - Terminal settings automatically sync with dotfiles repo
 
 ### Organized Configuration
 - `.zshrc` - Core Zsh configuration
@@ -45,6 +46,7 @@ Replacing standard Unix tools with modern alternatives:
 - `.gitconfig` - Git configuration with signing
 - `.p10k.zsh` - Powerlevel10k theme settings
 - `ssh_config` - SSH configuration
+- `iterm2/` - iTerm2 preferences (auto-synced)
 
 ## Installation
 
@@ -251,6 +253,13 @@ dotfiles/
 - Git commands automatically detect whether your repo uses `main` or `master` as the default branch
 - No more separate commands for main vs master workflows!
 - `gpsuo` (git push set-upstream origin) automatically uses your current branch, or you can specify one: `gpsuo feature-branch`
+
+### iTerm2 Auto-Sync
+- iTerm2 is configured to automatically save preferences to `~/repos/dotfiles/iterm2/`
+- Settings sync happens when iTerm2 quits
+- On new machines, `setup.sh` automatically configures iTerm2 to load from this folder
+- Your color schemes, key bindings, profiles, and all settings are automatically backed up!
+- Just restart iTerm2 after running setup and your settings will be restored
 
 ## Updating
 

@@ -95,6 +95,18 @@ fi
 create_symlink "$DOTFILES_DIR/ssh_config" "$HOME/.ssh/config"
 chmod 600 "$HOME/.ssh/config"
 
+# Configure iTerm2 to use dotfiles preferences
+echo -e "\n${YELLOW}Configuring iTerm2...${NC}"
+if [ -d "/Applications/iTerm.app" ]; then
+    defaults write com.googlecode.iterm2 PrefsCustomFolder -string "$DOTFILES_DIR/iterm2"
+    defaults write com.googlecode.iterm2 LoadPrefsFromCustomFolder -bool true
+    defaults write com.googlecode.iterm2 NoSyncNeverRemindPrefsChangesLostForFile -bool true
+    echo -e "${GREEN}✓${NC} iTerm2 configured to sync preferences"
+else
+    echo -e "${BLUE}→${NC} iTerm2 not installed (skipping)"
+fi
+
 echo -e "\n${GREEN}✓ Setup complete!${NC}"
 echo -e "${YELLOW}Note: Run './install_apps.sh' to install/update all required applications.${NC}"
 echo -e "${YELLOW}Restart your terminal or run 'source ~/.zshrc' to apply changes.${NC}"
+echo -e "${YELLOW}If using iTerm2, restart it to sync your settings.${NC}"
