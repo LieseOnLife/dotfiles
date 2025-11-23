@@ -94,11 +94,17 @@ gus_auto() {
 }
 
 gpsuo() {
-    git push --set-upstream origin $@
+    # Use provided branch or auto-detect current branch
+    local branch="${1:-$(git symbolic-ref --short HEAD 2>/dev/null)}"
+    if [ -z "$branch" ]; then
+        echo "Error: Not on a branch or not in a git repository"
+        return 1
+    fi
+    git push --set-upstream origin "$branch"
 }
 
 gcpsuo() {
-    gc && gpsuo $@
+    gc && gpsuo "$@"
 }
 
 gbb() {

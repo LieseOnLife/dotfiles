@@ -18,9 +18,20 @@ alias ll='ls -al'
 alias rmd="rm -dr"
 alias ..="cd .."
 alias ...="cd /"
-alias bp="vi ~/.zshrc"
-alias bpd="vi ~/.zshrc_datadog"
-alias szs="source ~/.zshrc"
+
+# Edit config files (zs = zsh source)
+alias zs="vi ~/.zshrc"              # Edit main zshrc
+alias zsa="vi ~/.zsh_aliases"       # Edit aliases
+alias zsf="vi ~/.zsh_functions"     # Edit functions
+alias zsi="vi ~/.zsh_integrations"  # Edit integrations
+alias zsv="vi ~/.vimrc"             # Edit vim config
+alias zsg="vi ~/.gitconfig"         # Edit git config
+alias zsp="vi ~/.p10k.zsh"          # Edit powerlevel10k config
+alias zssh="vi ~/.ssh/config"       # Edit SSH config
+alias zsd="vi ~/.zshrc_datadog"     # Edit Datadog config
+
+# Reload config
+alias szs="source ~/.zshrc"         # Source/reload zsh config
 
 # Rose stuff
 alias sshr="ssh saje@192.168.50.10"
