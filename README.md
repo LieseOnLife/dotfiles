@@ -31,10 +31,15 @@ Replacing standard Unix tools with modern alternatives:
 - **Cloud/Infrastructure**: kubectl, helm, terraform, vault, gcloud
 - **Utilities**: direnv, jq, pre-commit
 
+### Smart Features
+- **Auto-detecting Git workflows** - Automatically detects whether your repo uses `main` or `master`
+- **Auto-branch push** - Push commands automatically detect your current branch
+- **Quick config editing** - One-command access to edit any config file
+
 ### Organized Configuration
 - `.zshrc` - Core Zsh configuration
 - `.zsh_aliases` - All command aliases (Git, K8s, Terraform, GCP, etc.)
-- `.zsh_functions` - Custom shell functions
+- `.zsh_functions` - Custom shell functions (including smart git helpers)
 - `.zsh_integrations` - Tool integrations (pyenv, kubectl, aws, etc.)
 - `.vimrc` - Vim configuration
 - `.gitconfig` - Git configuration with signing
@@ -43,7 +48,51 @@ Replacing standard Unix tools with modern alternatives:
 
 ## Installation
 
-### Quick Setup on New Machine
+### Bootstrap from Scratch (Fresh Machine)
+
+If you're setting up a brand new Mac, follow this order:
+
+**Phase 1: Get Git**
+```bash
+# Install Xcode Command Line Tools (includes git)
+xcode-select --install
+```
+
+**Phase 2: Clone Dotfiles**
+```bash
+# Clone the repo (authenticate with GitHub when prompted)
+git clone https://github.com/YOUR_USERNAME/dotfiles.git ~/repos/dotfiles
+cd ~/repos/dotfiles
+```
+
+**Phase 3: Setup Shell Environment**
+```bash
+# Installs Oh-My-Zsh, plugins, and creates symlinks
+./setup.sh
+```
+
+**Phase 4: Install All Tools**
+```bash
+# Installs Homebrew (if needed) and all development tools
+./install_apps.sh
+```
+
+**Phase 5: Activate**
+```bash
+# Restart terminal or source the new config
+source ~/.zshrc
+
+# Configure your Powerlevel10k prompt theme
+p10k configure
+```
+
+**Phase 6: Personalize**
+```bash
+# Update git config with your email and signing key
+zsg  # Opens .gitconfig for editing
+```
+
+### Quick Setup (If You Already Have Git)
 
 1. **Clone this repository:**
    ```bash
@@ -78,35 +127,21 @@ Replacing standard Unix tools with modern alternatives:
    p10k configure
    ```
 
-### Manual Installation
-
-If you prefer to install components individually:
-
-```bash
-# Install Oh-My-Zsh
-sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
-
-# Install Powerlevel10k
-git clone --depth=1 https://github.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k
-
-# Install plugins
-git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
-
-# Create symlinks manually
-ln -s ~/repos/dotfiles/.zshrc ~/.zshrc
-ln -s ~/repos/dotfiles/.zsh_aliases ~/.zsh_aliases
-ln -s ~/repos/dotfiles/.zsh_functions ~/.zsh_functions
-ln -s ~/repos/dotfiles/.zsh_integrations ~/.zsh_integrations
-ln -s ~/repos/dotfiles/.vimrc ~/.vimrc
-ln -s ~/repos/dotfiles/.gitconfig ~/.gitconfig
-ln -s ~/repos/dotfiles/.p10k.zsh ~/.p10k.zsh
-ln -s ~/repos/dotfiles/ssh_config ~/.ssh/config
-```
-
 ## Notable Aliases
 
-### Git Shortcuts
+### Edit Config Files (Quick Access)
+- `zs` - Edit main `.zshrc`
+- `zsa` - Edit `.zsh_aliases`
+- `zsf` - Edit `.zsh_functions`
+- `zsi` - Edit `.zsh_integrations`
+- `zsv` - Edit `.vimrc`
+- `zsg` - Edit `.gitconfig`
+- `zsp` - Edit `.p10k.zsh`
+- `zssh` - Edit `.ssh/config`
+- `zsd` - Edit `.zshrc_datadog`
+- `szs` - Reload/source `.zshrc`
+
+### Git Shortcuts (with Smart Auto-Detection)
 - `g` - git
 - `gs` - git switch
 - `gss` - git status
@@ -114,7 +149,12 @@ ln -s ~/repos/dotfiles/ssh_config ~/.ssh/config
 - `gc` - git commit
 - `gp` - git pull
 - `gpu` - git push
-- `gsm`/`gsmm` - Switch to master/main and pull
+- `gsm` - **Smart:** Switch to default branch (main/master) and pull
+- `gpom` - **Smart:** Pull from default branch (main/master) and fetch tags
+- `grm` - **Smart:** Rebase on default branch (main/master)
+- `gu` - **Smart:** Update workflow (switch to default, back, rebase)
+- `gus` - **Smart:** Update with stash (stash, update, rebase, apply)
+- `gpsuo [branch]` - **Smart:** Push with upstream (auto-detects current branch or use specified)
 - `gr` - git rebase
 
 ### Kubernetes (K8s)
@@ -143,17 +183,37 @@ ln -s ~/repos/dotfiles/ssh_config ~/.ssh/config
 
 ## Customization
 
-### Adding New Aliases
-Edit `~/.zsh_aliases` (which is symlinked to this repo) and run:
+### Quick Edit Commands
+Use the `zs*` aliases to quickly edit any config file:
 ```bash
-source ~/.zshrc
+zsa   # Edit aliases
+zsf   # Edit functions
+zs    # Edit main zshrc
+szs   # Reload changes
+```
+
+### Adding New Aliases
+Edit `~/.zsh_aliases` (which is symlinked to this repo):
+```bash
+zsa   # Opens aliases file
+# Make your changes, save, then:
+szs   # Reload config
 ```
 
 ### Adding New Functions
-Edit `~/.zsh_functions` and reload your shell.
+Edit `~/.zsh_functions` and reload your shell:
+```bash
+zsf   # Opens functions file
+# Make your changes, save, then:
+szs   # Reload config
+```
 
 ### Modifying Git Config
-Edit `.gitconfig` in this repo. Remember to update your email and signing key.
+Edit `.gitconfig` in this repo:
+```bash
+zsg   # Opens git config
+```
+Remember to update your email and signing key.
 
 ## File Structure
 
@@ -186,6 +246,11 @@ dotfiles/
 - All config files are symlinked, so changes in your home directory will be reflected in the repo
 - Remember to set your Git email and signing key in `.gitconfig`
 - Datadog-specific configurations are loaded from `~/.zshrc_datadog` if present (not tracked in this repo)
+
+### Smart Git Features
+- Git commands automatically detect whether your repo uses `main` or `master` as the default branch
+- No more separate commands for main vs master workflows!
+- `gpsuo` (git push set-upstream origin) automatically uses your current branch, or you can specify one: `gpsuo feature-branch`
 
 ## Updating
 
