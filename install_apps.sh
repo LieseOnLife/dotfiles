@@ -53,7 +53,6 @@ brew install tfenv            # Terraform version management
 brew install kubectl          # Kubernetes CLI
 brew install helm             # Kubernetes package manager
 brew install terraform        # Infrastructure as code
-brew install vault            # HashiCorp Vault
 brew install direnv           # Environment variable management
 
 # Other utilities
