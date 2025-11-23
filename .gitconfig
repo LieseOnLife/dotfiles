@@ -1,7 +1,7 @@
 [user]
-	email = YOUR_EMAIL@example.com
-	name = Your Name
-	signingkey = YOUR_SSH_KEY
+	email = YOUR_EMAIL@example.com  # CHANGE THIS
+	name = Your Name                # CHANGE THIS
+	# signingkey = YOUR_SSH_KEY     # ADD YOUR SSH SIGNING KEY HERE
 [commit]
 	gpgsign = true
 [tag]
@@ -13,7 +13,7 @@
 	insteadOf = https://github.com/
 [core]
 	excludesfile = ~/.gitignore_global
-	hooksPath = /path/to/your/hooks
+	# hooksPath = /path/to/your/hooks  # Optional: Add if you use global git hooks
 [pull] 
 	rebase = true
 [filter "lfs"]
@@ -21,11 +21,13 @@
 	smudge = git-lfs smudge -- %f
 	process = git-lfs filter-process
 	required = true
-[safe]
-	directory = ~/dd/dd-source/.git
-#[include]
-#	path = ~/.config/gitsign/gitconfig
-[maintenance]
-	repo = ~/go/src/github.com/DataDog/dd-source
+# [safe]
+	# directory = /path/to/safe/repo  # Optional: Add safe directories if needed
+
+# [include]
+	# path = ~/.config/gitsign/gitconfig  # Optional: Include additional git config
+
+# [maintenance]
+	# repo = /path/to/repo  # Optional: Add repos for git maintenance
 [credential]
 	helper = store
