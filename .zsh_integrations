@@ -1,0 +1,69 @@
+###################
+### Tool Integrations
+###################
+
+# iTerm2 shell integration
+[[ -e "${HOME}/.iterm2_shell_integration.zsh" ]] && source "${HOME}/.iterm2_shell_integration.zsh"
+
+# fzf autocomplete
+[ -f /opt/homebrew/opt/fzf/shell/completion.zsh ] && source /opt/homebrew/opt/fzf/shell/completion.zsh
+[ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
+
+# fzf-tab-completion
+if [ -f ~/repos/fzf-tab-completion/zsh/fzf-zsh-completion.sh ]; then
+    source ~/repos/fzf-tab-completion/zsh/fzf-zsh-completion.sh
+    bindkey '^I' fzf_completion
+fi
+
+# Google Cloud SDK
+if [ -f '~/google-cloud-sdk/path.zsh.inc' ]; then
+    source '~/google-cloud-sdk/path.zsh.inc'
+fi
+
+if [ -f '~/google-cloud-sdk/completion.zsh.inc' ]; then
+    source '~/google-cloud-sdk/completion.zsh.inc'
+fi
+
+# pyenv initialization
+if command -v pyenv 1>/dev/null 2>&1; then
+    eval "$(pyenv init -)"
+    eval "$(pyenv init --path)"
+fi
+
+# rbenv initialization
+if command -v rbenv 1>/dev/null 2>&1; then
+    eval "$(rbenv init -)"
+fi
+
+# AWS completion
+if command -v aws_completer 1>/dev/null 2>&1; then
+    autoload bashcompinit && bashcompinit
+    complete -C aws_completer aws
+fi
+
+# kubectl completion
+if command -v kubectl 1>/dev/null 2>&1; then
+    source <(kubectl completion zsh)
+    # Make 'k' alias work with completion
+    compdef k=kubectl
+fi
+
+# dd-gitsign
+if command -v dd-gitsign &> /dev/null; then
+    eval "$(dd-gitsign load-key)"
+fi
+
+# direnv hook
+if command -v direnv 1>/dev/null 2>&1; then
+    eval "$(direnv hook zsh)"
+fi
+
+# zoxide initialization
+if command -v zoxide 1>/dev/null 2>&1; then
+    eval "$(zoxide init zsh)"
+fi
+
+# SCFW environment variables
+export SCFW_DD_AGENT_LOG_PORT="10365"
+export SCFW_DD_LOG_LEVEL="ALLOW"
+export SCFW_HOME="~/.scfw"

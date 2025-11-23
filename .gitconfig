@@ -1,0 +1,31 @@
+[user]
+	email = YOUR_EMAIL@example.com
+	name = Your Name
+	signingkey = YOUR_SSH_KEY
+[commit]
+	gpgsign = true
+[tag]
+	forceSignAnnotated = true
+	gpgsign = true
+[gpg]
+	format = ssh
+[url "git@github.com:"]
+	insteadOf = https://github.com/
+[core]
+	excludesfile = ~/.gitignore_global
+	hooksPath = /path/to/your/hooks
+[pull] 
+	rebase = true
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[safe]
+	directory = ~/dd/dd-source/.git
+#[include]
+#	path = ~/.config/gitsign/gitconfig
+[maintenance]
+	repo = ~/go/src/github.com/DataDog/dd-source
+[credential]
+	helper = store

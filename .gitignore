@@ -1,0 +1,25 @@
+# Backup files created by setup script
+*.backup
+
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Thumbnails
+._*
+
+# Files that might contain secrets or local-only configs
+.env
+.env.local
+*.key
+*.pem
+
+# Vim swap files
+*.swp
+*.swo
+*~
+
+# Local machine-specific files (not tracked in this repo)
+.zshrc_datadog
+.zshrc_local

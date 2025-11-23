@@ -1,0 +1,100 @@
+###################
+### Custom Functions
+###################
+
+# Create a new directory and enter it
+function mkd() {
+    command mkdir $1 && cd $1
+}
+
+# List and grep
+function llg() {
+    ll | grep $1
+}
+
+# Quick navigation functions
+function ../() {
+    cd ../$1
+}
+
+function ../../() {
+    cd ../../$1
+}
+
+function ../../../() {
+    cd ../../../$1
+}
+
+function ../../../../() {
+    cd ../../../../$1
+}
+
+###################
+### Git Functions
+###################
+
+gpsuo() {
+    git push --set-upstream origin $@
+}
+
+gcpsuo() {
+    gc && gpsuo $@
+}
+
+gbb() {
+    gb $1 && gs $1
+}
+
+gbbb() {
+    gb $1 && gs $1 && gpo $1
+}
+
+gbbbd() {
+    gb -D $1 && gbbb $1
+}
+
+nd_precommit() {
+    echo "=== ND's PRECOMMIT ==="
+    echo "Running precommit on: $(git diff-tree --no-commit-id --name-only HEAD -r)"
+    pre-commit run --files $(git diff-tree --no-commit-id --name-only HEAD -r)
+    echo
+    echo "======================"
+    echo "Running precommit on $1"
+    pre-commit run --files $1*
+}
+
+###################
+### K8s Functions
+###################
+
+kcscn() {
+    kcsc --namespace=$1
+}
+
+ke() {
+    k exec -it $1 -- bash
+}
+
+ksd1() {
+    kubectl scale deploy/$1 --replicas=1
+}
+
+###################
+### Terraform Functions
+###################
+
+tfd() {
+    TFENV_ARCH=amd64 tfenv install $1
+}
+
+bt() {
+    bzl test //$1/...
+}
+
+###################
+### SSH Functions
+###################
+
+ssh_fingerprint() {
+    ssh-keygen -E md5 -lf "$1"
+}

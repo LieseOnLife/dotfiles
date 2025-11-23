@@ -1,0 +1,179 @@
+###################
+### Basic System Aliases
+###################
+
+# Modern CLI tool replacements
+alias cat=bat
+alias ccat='\cat'
+alias cd=z
+alias rm=rip
+alias grep=rg
+alias top=btm
+
+# Directory listing aliases
+alias ls=lsd
+alias ll='ls -al'
+
+# System shortcuts
+alias rmd="rm -dr"
+alias ..="cd .."
+alias ...="cd /"
+alias bp="vi ~/.zshrc"
+alias bpd="vi ~/.zshrc_datadog"
+alias szs="source ~/.zshrc"
+
+# Rose stuff
+alias sshr="ssh saje@192.168.50.10"
+
+# SCFW aliases
+alias npm="scfw run npm"
+alias pip="scfw run pip"
+alias poetry="scfw run poetry"
+
+###################
+### Git Shortcuts
+###################
+
+alias gitssh1="ssh -T git@github.com"
+alias g="git"
+alias gb="git branch"
+alias gbd="gb -D"
+alias gss="git status"
+alias gs="git switch"
+alias gsf="git switch -f"
+alias gsm="gs master && git pull origin master"
+alias gsmm="gs main && git pull origin main"
+alias gst="git stash"
+alias gsta="gst apply"
+alias gstd="gst drop"
+alias gp="git pull"
+alias gpu="git push"
+alias gpo="gp origin"
+alias gpuo="gpu origin"
+alias gpoh="gpuo HEAD"
+alias gpomm="gpo main"
+alias gpom="gpo master && git fetch --tags"
+alias gpop="gpo prod"
+alias gr="git rebase"
+alias grm="gr master"
+alias grmm="gr main"
+alias grc="gr --continue"
+alias gro="gr --onto"
+alias gu="gsm && gs - && grm"
+alias gum="gsmm && gs - && grmm"
+alias gus="gst && gsm && gpom && gs - && grm && gsta"
+alias ga="git add"
+alias gaa="ga -A && gss"
+alias gast="gaa && gst"
+alias gt="git tag"
+alias gtp="git push --tags"
+alias gc="git commit"
+alias gca="gc --amend"
+alias gcpoh="gc && gpoh"
+alias gac="gaa && gc"
+alias gacpoh="gaa && gc && gpoh"
+alias gacrc="gac && grc"
+alias gf="git fetch"
+
+alias pcci="nd_precommit ~/dd/cloud-inventory/*"
+
+###################
+### GCP Shortcuts
+###################
+
+alias c="gcloud"
+alias caal="c auth application-default login"
+alias cal="c auth login"
+alias caaal="cal & caal"
+
+###################
+### Helm
+###################
+
+alias h="helm"
+
+###################
+### K8s Shortcuts
+###################
+
+alias k="kubectl"
+alias kg="k get"
+alias kgp="kg pods"
+alias kgd="kg deployments"
+alias kgr="kh rs"
+alias kc="k config"
+alias kcuc="kc use-context"
+alias kcs="kc set-context"
+alias kcsc="kcs --current"
+alias kn="kubens"
+alias kd="k delete"
+alias ksdvo="ksd1 vendify-orchestrator"
+
+###################
+### Terraform Shortcuts
+###################
+
+alias tf="terraform"
+alias tff="tf fmt"
+alias tfi="terraform init"
+alias tfs="terraform state"
+alias tfir="terraform init -reconfigure"
+alias tfiu="tfi -upgrade"
+alias tfp="terraform plan"
+alias tfip="tfi && tfp"
+alias tfa="tf apply"
+alias tfia="tfi && tfa"
+alias tfpnc="tfp -no-color"
+alias tfat="terraform apply -target"
+alias tfcr="find ~/repos -type d -name .terraform -exec rm -rf {} \\;"
+alias tfcd="find ~/dd -type d -name .terraform -exec rm -rf {} \\;"
+alias tfco="find ~/dd/cloudops -type d -name .terraform -exec rm -rf {} \\;"
+alias tfcc="find ~/dd/cloudops -type d -name .cloudops -exec rm -rf {} \\;"
+alias tfcb="find ~/dd/cloudops -type d -name build -exec rm -rf {} \\;"
+alias tfccc="tfco && tfcc && tfcb"
+alias tfci="find ~/dd/cloud-inventory -type d -name .terraform -exec rm -rf {} \\;"
+alias tfc="tfcd"
+alias tffu="tf force-unlock"
+alias tft="tf test"
+
+# Terragrunt shortcuts
+alias tg="terragrunt"
+alias tgf="terragrunt hclfmt"
+alias tgg="tff && tgf"
+alias tgp="tg plan"
+alias tgpd="tgp --terragrunt-log-level debug --terragrunt-debug"
+alias tgpp="tg plan 2> >(grep -v '\[terragrunt]' >&2)"
+alias tgs="tg state 2> >(grep -v '\[terragrunt]' >&2)"
+alias tgsm="tgs mv"
+alias tgsl="tgs list 2> >(grep -v '\[terragrunt]' >&2)"
+alias tga="terragrunt apply 2> >(grep -v '\[terragrunt]' >&2)"
+alias tgapplyaa="tgapply -auto-approve"
+alias tgaa="tga -auto-approve"
+alias tgapplyall="terragrunt apply-all 2> >(grep -v '\[terragrunt]' >&2)"
+alias tgc="find ~/dd/cloud-inventory -type d -name .terragrunt-cache -exec rm -rf {} \\;"
+alias tgpp="tgc && tgp"
+alias tgo="tg output 2> >(grep -v '\[terragrunt]' >&2)"
+alias tga="tg apply"
+alias tgci="find ~/dd/cloud-inventory -type d -name .terragrunt -exec rm -rf {} \\;"
+alias tfclean="tgci && tfci && tfccc"
+
+###################
+### Bazel Shortcuts
+###################
+
+alias br="bzl run"
+alias bq="bzl query"
+
+###################
+### Vagrant
+###################
+
+alias vg="vagrant"
+alias vgssh="vg ssh"
+
+###################
+### Vault
+###################
+
+alias v="vault"
+alias vs="v status -format=json | jq -r '.cluster_name'"
