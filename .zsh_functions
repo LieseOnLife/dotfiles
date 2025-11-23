@@ -33,6 +33,66 @@ function ../../../../() {
 ### Git Functions
 ###################
 
+# Automatically detect default branch (main or master)
+get_default_branch() {
+    # Check if we're in a git repo
+    if ! git rev-parse --git-dir > /dev/null 2>&1; then
+        echo "master"  # fallback
+        return
+    fi
+
+    # Try to get the default branch from the remote
+    local default_branch=$(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed 's@^refs/remotes/origin/@@')
+
+    # If that didn't work, check which branch exists locally
+    if [ -z "$default_branch" ]; then
+        if git show-ref --verify --quiet refs/heads/main; then
+            default_branch="main"
+        elif git show-ref --verify --quiet refs/heads/master; then
+            default_branch="master"
+        else
+            # Check remote branches
+            if git show-ref --verify --quiet refs/remotes/origin/main; then
+                default_branch="main"
+            elif git show-ref --verify --quiet refs/remotes/origin/master; then
+                default_branch="master"
+            else
+                default_branch="main"  # modern default
+            fi
+        fi
+    fi
+
+    echo "$default_branch"
+}
+
+# Switch to default branch and pull
+gsm_auto() {
+    local branch=$(get_default_branch)
+    gs $branch && git pull origin $branch
+}
+
+# Pull from default branch origin
+gpom_auto() {
+    local branch=$(get_default_branch)
+    gpo $branch && git fetch --tags
+}
+
+# Rebase on default branch
+grm_auto() {
+    local branch=$(get_default_branch)
+    gr $branch
+}
+
+# Update: switch to default, switch back, rebase on default
+gu_auto() {
+    gsm_auto && gs - && grm_auto
+}
+
+# Update with stash: stash, update, stash apply
+gus_auto() {
+    gst && gsm_auto && gpom_auto && gs - && grm_auto && gsta
+}
+
 gpsuo() {
     git push --set-upstream origin $@
 }
