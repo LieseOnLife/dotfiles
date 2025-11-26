@@ -15,12 +15,11 @@ alias ls=lsd
 alias ll='ls -al'
 
 # Backup aliases for original commands
-alias ols='\ls'
-alias ocat='\cat'
-alias ocd='\cd'
-alias orm='\rm'
-alias ogrep='\grep'
-alias otop='\top'
+alias lls='\ls'
+alias ccd='\cd'
+alias rrm='\rm'
+alias ggrep='\grep'
+alias ttop='\top'
 
 # System shortcuts
 alias rmd="rm -dr"
