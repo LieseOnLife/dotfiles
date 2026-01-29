@@ -98,6 +98,38 @@ alias gacpoh="gaa && gc && gpoh"
 alias gacrc="gac && grc"
 alias gf="git fetch"
 
+###################
+### Git Machete
+###################
+
+alias gm="git machete"
+alias gms="gm status"                # Show branch tree with sync status
+alias gmsl="gm status -l"            # Show branch tree with commits
+alias gmt="gm traverse"              # Walk through and update all branches
+alias gmty="gm traverse -y"          # Traverse without confirmations
+alias gmtw="gm traverse -W"          # Traverse, push to remote
+alias gmu="gm update"                # Rebase current branch on parent
+alias gmum="gm update -m"            # Merge current branch with parent (no rebase)
+alias gmgo="gm go"                   # Interactive branch selection
+alias gmgu="gm go up"                # Go to parent branch
+alias gmgd="gm go down"              # Go to first child branch
+alias gmgr="gm go root"              # Go to root branch
+alias gmgn="gm go next"              # Go to next sibling branch
+alias gme="gm edit"                  # Edit branch layout file
+alias gma="gm add"                   # Add current branch to tree
+alias gmao="gm add -o"               # Add branch as child of current
+alias gmd="gm discover"              # Auto-discover branch dependencies
+alias gmdy="gm discover -y"          # Auto-discover without confirmation
+alias gmso="gm slide-out"            # Slide out current branch (after merge)
+alias gmsod="gm slide-out -d"        # Slide out and delete branch
+alias gmdf="gm diff"                 # Diff against fork point
+alias gml="gm log"                   # Log branch-specific commits
+alias gmsq="gm squash"               # Squash branch commits into one
+alias gmadv="gm advance"             # Fast-forward to child, push, slide out
+alias gmgh="gm github"               # GitHub PR integration
+alias gmghc="gm github create"       # Create PR for current branch
+alias gmghco="gm github checkout"    # Checkout PR by number
+
 alias pcci="nd_precommit ~/dd/cloud-inventory/*"
 
 ###################

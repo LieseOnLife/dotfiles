@@ -51,10 +51,10 @@ if command -v kubectl 1>/dev/null 2>&1; then
     compdef k=kubectl
 fi
 
-# dd-gitsign
-if command -v dd-gitsign &> /dev/null; then
-    eval "$(dd-gitsign load-key)"
-fi
+# dd-gitsign (uncomment after setting up key in #commit-signing)
+# if command -v dd-gitsign &> /dev/null; then
+#     eval "$(dd-gitsign load-key)"
+# fi
 
 # direnv hook
 if command -v direnv 1>/dev/null 2>&1; then
