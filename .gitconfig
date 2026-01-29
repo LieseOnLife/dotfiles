@@ -1,14 +1,15 @@
 [user]
-	email = YOUR_EMAIL@example.com  # CHANGE THIS
-	name = Your Name                # CHANGE THIS
-	# signingkey = YOUR_SSH_KEY     # ADD YOUR SSH SIGNING KEY HERE
-[commit]
-	gpgsign = true
-[tag]
-	forceSignAnnotated = true
-	gpgsign = true
-[gpg]
-	format = ssh
+	name = Saje Liese
+
+# Local config (not tracked) - contains email
+[include]
+	path = ~/.gitconfig.local
+
+# Datadog repo config (signing enabled) - loaded conditionally
+[includeIf "gitdir:~/dd/"]
+	path = ~/.gitconfig-datadog
+[includeIf "gitdir:~/go/src/github.com/DataDog/"]
+	path = ~/.gitconfig-datadog
 [url "git@github.com:"]
 	insteadOf = https://github.com/
 [core]

@@ -83,6 +83,7 @@ create_symlink "$DOTFILES_DIR/.zsh_functions" "$HOME/.zsh_functions"
 create_symlink "$DOTFILES_DIR/.zsh_integrations" "$HOME/.zsh_integrations"
 create_symlink "$DOTFILES_DIR/.vimrc" "$HOME/.vimrc"
 create_symlink "$DOTFILES_DIR/.gitconfig" "$HOME/.gitconfig"
+create_symlink "$DOTFILES_DIR/.gitconfig-datadog" "$HOME/.gitconfig-datadog"
 create_symlink "$DOTFILES_DIR/.p10k.zsh" "$HOME/.p10k.zsh"
 
 # Create SSH directory if it doesn't exist

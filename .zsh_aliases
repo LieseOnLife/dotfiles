@@ -17,7 +17,7 @@ alias ll='ls -al'
 # Backup aliases for original commands
 alias lls='\ls'
 alias ccd='\cd'
-alias rrm='\rm'
+alias rrm="\\rm"
 alias ggrep='\grep'
 alias ttop='\top'
 
@@ -27,15 +27,15 @@ alias ..="cd .."
 alias ...="cd /"
 
 # Edit config files (zs = zsh source)
-alias zs="vi ~/.zshrc"              # Edit main zshrc
-alias zsa="vi ~/.zsh_aliases"       # Edit aliases
-alias zsf="vi ~/.zsh_functions"     # Edit functions
-alias zsi="vi ~/.zsh_integrations"  # Edit integrations
-alias zsv="vi ~/.vimrc"             # Edit vim config
-alias zsg="vi ~/.gitconfig"         # Edit git config
-alias zsp="vi ~/.p10k.zsh"          # Edit powerlevel10k config
-alias zssh="vi ~/.ssh/config"       # Edit SSH config
-alias zsd="vi ~/.zshrc_datadog"     # Edit Datadog config
+alias zs="vi ~/repos/dotfiles/.zshrc"              # Edit main zshrc
+alias zsa="vi ~/repos/dotfiles/.zsh_aliases"       # Edit aliases
+alias zsf="vi ~/repos/dotfiles/.zsh_functions"     # Edit functions
+alias zsi="vi ~/repos/dotfiles/.zsh_integrations"  # Edit integrations
+alias zsv="vi ~/repos/dotfiles/.vimrc"             # Edit vim config
+alias zsg="vi ~/repos/dotfiles/.gitconfig"         # Edit git config
+alias zsp="vi ~/repos/dotfiles/.p10k.zsh"          # Edit powerlevel10k config
+alias zssh="vi ~/repos/dotfiles/.ssh/config"       # Edit SSH config
+alias zsd="vi ~/repos/dotfiles/.zshrc_datadog"     # Edit Datadog config
 
 # Reload config
 alias szs="source ~/.zshrc"         # Source/reload zsh config
@@ -47,6 +47,13 @@ alias sshr="ssh saje@192.168.50.10"
 alias npm="scfw run npm"
 alias pip="scfw run pip"
 alias poetry="scfw run poetry"
+##################
+### AI Shortcuts
+#################
+alias cl="claude"
+alias clmo="cl --model opus"
+
+
 
 ###################
 ### Git Shortcuts

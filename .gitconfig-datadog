@@ -1,0 +1,19 @@
+# Datadog-specific git config
+# This is loaded conditionally for repos in ~/dd/
+
+[user]
+	# signingkey will be set by dd-gitsign
+
+# Local config (not tracked) - contains email
+[include]
+	path = ~/.gitconfig-datadog.local
+
+[commit]
+	gpgsign = true
+
+[tag]
+	forceSignAnnotated = true
+	gpgsign = true
+
+[gpg]
+	format = ssh
