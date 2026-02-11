@@ -2,7 +2,7 @@
 # This is loaded conditionally for repos in ~/dd/
 
 [user]
-	# signingkey will be set by dd-gitsign
+	# signingkey inherited from global config
 
 # Local config (not tracked) - contains email
 [include]
@@ -15,5 +15,5 @@
 	forceSignAnnotated = true
 	gpgsign = true
 
-[gpg]
-	format = ssh
+[core]
+	hooksPath = /usr/local/dd/global_hooks

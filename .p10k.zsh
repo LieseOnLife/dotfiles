@@ -33,6 +33,7 @@
   typeset -g POWERLEVEL9K_LEFT_PROMPT_ELEMENTS=(
     # =========================[ Line #1 ]=========================
     os_icon                 # os identifier
+    git_worktree            # git worktree indicator (custom)
     dir                     # current directory
     vcs                     # git status
     # =========================[ Line #2 ]=========================
@@ -363,7 +364,7 @@
   # Version control background colors.
   typeset -g POWERLEVEL9K_VCS_CLEAN_BACKGROUND=213
   typeset -g POWERLEVEL9K_VCS_MODIFIED_BACKGROUND=205
-  typeset -g POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND=2
+  typeset -g POWERLEVEL9K_VCS_UNTRACKED_BACKGROUND=213
   typeset -g POWERLEVEL9K_VCS_CONFLICTED_BACKGROUND=3
   typeset -g POWERLEVEL9K_VCS_LOADING_BACKGROUND=8
 
@@ -1803,6 +1804,32 @@
   typeset -g POWERLEVEL9K_EXAMPLE_FOREGROUND=3
   typeset -g POWERLEVEL9K_EXAMPLE_BACKGROUND=1
   # typeset -g POWERLEVEL9K_EXAMPLE_VISUAL_IDENTIFIER_EXPANSION='⭐'
+
+  #############################[ git_worktree: worktree indicator ]##############################
+  # Custom segment to show when inside a git worktree (not the main working tree).
+  # Displays the original repo name with a tree emoji (transparent background).
+  function prompt_git_worktree() {
+    # Check if we're in a git repository
+    local git_dir
+    git_dir=$(git rev-parse --git-dir 2>/dev/null) || return
+
+    # Check if this is a worktree (git-dir will contain '/worktrees/' for linked worktrees)
+    if [[ "$git_dir" == *"/worktrees/"* ]]; then
+      # Extract original repo name from path (before /.git/worktrees/)
+      local repo_path="${git_dir%%/.git/worktrees/*}"
+      local repo_name="${repo_path:t}"
+      p10k segment -b 089 -f 255 -i $'\uf1bb' -t "$repo_name"
+    fi
+  }
+
+  # Instant prompt version - don't show anything to avoid issues
+  function instant_prompt_git_worktree() {
+    # Skip in instant prompt since git operations can be slow
+  }
+
+  # Git worktree segment styling
+  typeset -g POWERLEVEL9K_GIT_WORKTREE_FOREGROUND=255  # White text
+  typeset -g POWERLEVEL9K_GIT_WORKTREE_BACKGROUND=089  # Dark pink
 
   # Transient prompt works similarly to the builtin transient_rprompt option. It trims down prompt
   # when accepting a command line. Supported values:

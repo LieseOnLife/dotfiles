@@ -97,6 +97,7 @@ alias gac="gaa && gc"
 alias gacpoh="gaa && gc && gpoh"
 alias gacrc="gac && grc"
 alias gf="git fetch"
+alias gclean='git branch --merged $(git symbolic-ref refs/remotes/origin/HEAD 2>/dev/null | sed "s@^refs/remotes/origin/@@") | \grep -Ev "main|master|\*" | xargs -r git branch -d'
 
 ###################
 ### Git Machete
@@ -129,6 +130,41 @@ alias gmadv="gm advance"             # Fast-forward to child, push, slide out
 alias gmgh="gm github"               # GitHub PR integration
 alias gmghc="gm github create"       # Create PR for current branch
 alias gmghco="gm github checkout"    # Checkout PR by number
+
+###################
+### Git Worktree
+###################
+
+alias gw="git worktree"                 # Base command
+
+# Creating worktrees
+# gwa: Add worktree, auto-creates saje/<folder-name> branch
+gwa() {
+  if [[ $# -lt 1 ]]; then
+    echo "Usage: gwa <path> [commit-ish]"
+    echo "Creates: git worktree add -b saje/<folder-name> <path>"
+    return 1
+  fi
+  local path="$1"
+  local branch_name="saje/${path:t}"
+  shift
+  git worktree add -b "$branch_name" "$path" "$@"
+}
+alias gwab="git worktree add -b"        # Add worktree with explicit branch name
+alias gwad="git worktree add --detach"  # Add worktree in detached HEAD
+
+# Managing worktrees
+alias gwl="git worktree list"           # List all worktrees
+alias gwr="git worktree remove"         # Remove a worktree
+alias gwrf="git worktree remove --force" # Force remove worktree
+alias gwm="git worktree move"           # Move worktree to new path
+
+# Maintenance
+alias gwp="git worktree prune"          # Clean stale worktree info
+alias gwpd="git worktree prune --dry-run" # Preview what would be pruned
+alias gwlk="git worktree lock"          # Prevent worktree removal
+alias gwulk="git worktree unlock"       # Allow worktree removal
+alias gwR="git worktree repair"         # Fix broken worktree links
 
 alias pcci="nd_precommit ~/dd/cloud-inventory/*"
 
@@ -193,7 +229,7 @@ alias tft="tf test"
 
 # Terragrunt shortcuts
 alias tg="terragrunt"
-alias tgf="terragrunt hclfmt"
+alias tgf="terragrunt hcl fmt"
 alias tgg="tff && tgf"
 alias tgp="tg plan"
 alias tgpd="tgp --terragrunt-log-level debug --terragrunt-debug"

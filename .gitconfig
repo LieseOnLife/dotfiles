@@ -1,11 +1,22 @@
 [user]
 	name = Saje Liese
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIO2Zhda8Ap95SqktOST2QhOUG1nkN5uWuIe/2+E7k753
 
 # Local config (not tracked) - contains email
 [include]
 	path = ~/.gitconfig.local
 
-# Datadog repo config (signing enabled) - loaded conditionally
+# Signing config (key must be global for dd-gitsign to work)
+[gpg]
+	format = ssh
+[gpg "ssh"]
+	program = dd-gitsign
+[commit]
+	gpgsign = false
+[tag]
+	gpgsign = false
+
+# Datadog repo config (enables signing) - loaded conditionally
 [includeIf "gitdir:~/dd/"]
 	path = ~/.gitconfig-datadog
 [includeIf "gitdir:~/go/src/github.com/DataDog/"]
@@ -32,3 +43,7 @@
 	# repo = /path/to/repo  # Optional: Add repos for git maintenance
 [credential]
 	helper = store
+[checkout]
+	guess = false
+[fetch]
+	prune = true
