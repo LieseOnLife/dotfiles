@@ -69,3 +69,11 @@ fi
 export SCFW_DD_AGENT_LOG_PORT="10365"
 export SCFW_DD_LOG_LEVEL="ALLOW"
 export SCFW_HOME="~/.scfw"
+
+# Git worktree completion (gws, gwr)
+_git_worktree_paths() {
+  local worktrees=("${(@f)$(git worktree list 2>/dev/null | awk '{print $1}')}")
+  compadd -a worktrees
+}
+compdef _git_worktree_paths gws
+compdef _git_worktree_paths gwr

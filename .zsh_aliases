@@ -135,6 +135,10 @@ alias gmghco="gm github checkout"    # Checkout PR by number
 ### Git Worktree
 ###################
 
+# Binary paths (change these if tools move)
+GIT_BIN="/opt/homebrew/bin/git"
+CODE_BIN="/usr/local/bin/code"
+
 alias gw="git worktree"                 # Base command
 
 # Creating worktrees
@@ -148,15 +152,71 @@ gwa() {
   local path="$1"
   local branch_name="saje/${path:t}"
   shift
-  git worktree add -b "$branch_name" "$path" "$@"
+  $GIT_BIN worktree add -b "$branch_name" "$path" "$@"
 }
 alias gwab="git worktree add -b"        # Add worktree with explicit branch name
 alias gwad="git worktree add --detach"  # Add worktree in detached HEAD
 
 # Managing worktrees
-alias gwl="git worktree list"           # List all worktrees
-alias gwr="git worktree remove"         # Remove a worktree
-alias gwrf="git worktree remove --force" # Force remove worktree
+alias gwl="$GIT_BIN worktree list"           # List all worktrees
+
+# gwr: Remove a worktree (uses fzf for selection)
+unalias gwr 2>/dev/null
+gwr() {
+  local worktree worktrees
+  if [[ $# -ge 1 ]]; then
+    $GIT_BIN worktree remove "$@"
+    return
+  fi
+
+  # Check if we're in a git repo
+  if ! $GIT_BIN rev-parse --git-dir &>/dev/null; then
+    echo "Not in a git repository"
+    return 1
+  fi
+
+  # Get worktree list
+  worktrees=$($GIT_BIN worktree list 2>/dev/null)
+  if [[ -z "$worktrees" ]]; then
+    echo "No worktrees found"
+    return 1
+  fi
+
+  # Use fzf to select
+  worktree=$(echo "$worktrees" | fzf --height 40% --reverse | awk '{print $1}')
+  if [[ -n "$worktree" ]]; then
+    $GIT_BIN worktree remove "$worktree"
+  fi
+}
+
+# gwrf: Force remove a worktree (uses fzf for selection)
+unalias gwrf 2>/dev/null
+gwrf() {
+  local worktree worktrees
+  if [[ $# -ge 1 ]]; then
+    $GIT_BIN worktree remove --force "$@"
+    return
+  fi
+
+  # Check if we're in a git repo
+  if ! $GIT_BIN rev-parse --git-dir &>/dev/null; then
+    echo "Not in a git repository"
+    return 1
+  fi
+
+  # Get worktree list
+  worktrees=$($GIT_BIN worktree list 2>/dev/null)
+  if [[ -z "$worktrees" ]]; then
+    echo "No worktrees found"
+    return 1
+  fi
+
+  # Use fzf to select
+  worktree=$(echo "$worktrees" | fzf --height 40% --reverse | awk '{print $1}')
+  if [[ -n "$worktree" ]]; then
+    $GIT_BIN worktree remove --force "$worktree"
+  fi
+}
 alias gwm="git worktree move"           # Move worktree to new path
 
 # Maintenance
@@ -165,6 +225,62 @@ alias gwpd="git worktree prune --dry-run" # Preview what would be pruned
 alias gwlk="git worktree lock"          # Prevent worktree removal
 alias gwulk="git worktree unlock"       # Allow worktree removal
 alias gwR="git worktree repair"         # Fix broken worktree links
+
+# gws: Switch to a worktree directory (uses fzf for selection)
+gws() {
+  local worktree worktrees
+  if [[ $# -ge 1 ]]; then
+    builtin cd "$1"
+    return
+  fi
+
+  # Check if we're in a git repo
+  if ! $GIT_BIN rev-parse --git-dir &>/dev/null; then
+    echo "Not in a git repository"
+    return 1
+  fi
+
+  # Get worktree list
+  worktrees=$($GIT_BIN worktree list 2>/dev/null)
+  if [[ -z "$worktrees" ]]; then
+    echo "No worktrees found"
+    return 1
+  fi
+
+  # Use fzf to select
+  worktree=$(echo "$worktrees" | fzf --height 40% --reverse | awk '{print $1}')
+  if [[ -n "$worktree" ]]; then
+    builtin cd "$worktree"
+  fi
+}
+
+# gwc: Open a worktree in VS Code (uses fzf for selection)
+gwc() {
+  local worktree worktrees
+  if [[ $# -ge 1 ]]; then
+    $CODE_BIN "$1"
+    return
+  fi
+
+  # Check if we're in a git repo
+  if ! $GIT_BIN rev-parse --git-dir &>/dev/null; then
+    echo "Not in a git repository"
+    return 1
+  fi
+
+  # Get worktree list
+  worktrees=$($GIT_BIN worktree list 2>/dev/null)
+  if [[ -z "$worktrees" ]]; then
+    echo "No worktrees found"
+    return 1
+  fi
+
+  # Use fzf to select
+  worktree=$(echo "$worktrees" | fzf --height 40% --reverse | awk '{print $1}')
+  if [[ -n "$worktree" ]]; then
+    $CODE_BIN "$worktree"
+  fi
+}
 
 alias pcci="nd_precommit ~/dd/cloud-inventory/*"
 

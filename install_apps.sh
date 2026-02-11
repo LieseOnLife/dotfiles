@@ -65,6 +65,9 @@ echo -e "\n${YELLOW}Installing cask applications...${NC}"
 # Terminal emulator
 brew install --cask iterm2
 
+# Code editor
+brew install --cask visual-studio-code
+
 echo -e "\n${GREEN}✓ Installation complete!${NC}"
 echo -e "${YELLOW}Note: Some tools may require additional configuration.${NC}"
 echo -e "${YELLOW}Run 'p10k configure' to customize your Powerlevel10k prompt.${NC}"

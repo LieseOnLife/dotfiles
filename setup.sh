@@ -96,6 +96,24 @@ fi
 create_symlink "$DOTFILES_DIR/ssh_config" "$HOME/.ssh/config"
 chmod 600 "$HOME/.ssh/config"
 
+# Install VS Code 'code' command
+echo -e "\n${YELLOW}Configuring VS Code...${NC}"
+VSCODE_BIN="/Applications/Visual Studio Code.app/Contents/Resources/app/bin/code"
+if [ -f "$VSCODE_BIN" ]; then
+    if command -v code &> /dev/null; then
+        echo -e "${BLUE}→${NC} 'code' command already available (skipping)"
+    else
+        # Create /usr/local/bin if it doesn't exist
+        if [ ! -d "/usr/local/bin" ]; then
+            sudo mkdir -p /usr/local/bin
+        fi
+        sudo ln -sf "$VSCODE_BIN" /usr/local/bin/code
+        echo -e "${GREEN}✓${NC} Installed 'code' command"
+    fi
+else
+    echo -e "${BLUE}→${NC} VS Code not installed (skipping 'code' command)"
+fi
+
 # Configure iTerm2 to use dotfiles preferences
 echo -e "\n${YELLOW}Configuring iTerm2...${NC}"
 if [ -d "/Applications/iTerm.app" ]; then
