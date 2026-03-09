@@ -65,6 +65,7 @@ fi
 
 # zoxide initialization
 if command -v zoxide 1>/dev/null 2>&1; then
+    export _ZO_DOCTOR=0
     eval "$(zoxide init zsh)"
 fi
 
