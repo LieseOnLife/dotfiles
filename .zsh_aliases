@@ -143,6 +143,7 @@ alias gw="git worktree"                 # Base command
 
 # Creating worktrees
 # gwa: Add worktree, auto-creates saje/<folder-name> branch
+unalias gwa 2>/dev/null
 gwa() {
   if [[ $# -lt 1 ]]; then
     echo "Usage: gwa <path> [commit-ish]"
@@ -153,6 +154,17 @@ gwa() {
   local branch_name="saje/${path:t}"
   shift
   $GIT_BIN worktree add -b "$branch_name" "$path" "$@"
+}
+
+# gwaa: Add worktree and switch to it
+gwaa() {
+  if [[ $# -lt 1 ]]; then
+    echo "Usage: gwaa <path> [commit-ish]"
+    echo "Creates worktree and switches to it"
+    return 1
+  fi
+  local path="$1"
+  gwa "$@" && builtin cd "$path"
 }
 alias gwab="git worktree add -b"        # Add worktree with explicit branch name
 alias gwad="git worktree add --detach"  # Add worktree in detached HEAD
@@ -225,6 +237,7 @@ alias gwpd="git worktree prune --dry-run" # Preview what would be pruned
 alias gwlk="git worktree lock"          # Prevent worktree removal
 alias gwulk="git worktree unlock"       # Allow worktree removal
 alias gwR="git worktree repair"         # Fix broken worktree links
+alias gwu="gwu_auto"                    # Update branch: fetch and rebase (no switch)
 
 # gws: Switch to a worktree directory (uses fzf for selection)
 gws() {

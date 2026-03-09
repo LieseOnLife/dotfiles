@@ -88,6 +88,12 @@ gu_auto() {
     gsm_auto && gs - && grm_auto
 }
 
+# Update for worktrees: fetch and rebase on origin/default (no branch switching)
+gwu_auto() {
+    local branch=$(get_default_branch)
+    git fetch origin $branch && gr origin/$branch
+}
+
 # Update with stash: stash, update, stash apply
 gus_auto() {
     gst && gsm_auto && gpom_auto && gs - && grm_auto && gsta
