@@ -13,6 +13,9 @@ source <(git machete completion zsh)
 [ -f /opt/homebrew/opt/fzf/shell/key-bindings.zsh ] && source /opt/homebrew/opt/fzf/shell/key-bindings.zsh
 
 # fzf-tab (replaces zsh completion menu with fzf)
+if [ ! -d ~/repos/fzf-tab ]; then
+    git -C ~/repos clone https://github.com/Aloxaf/fzf-tab
+fi
 if [ -f ~/repos/fzf-tab/fzf-tab.plugin.zsh ]; then
     source ~/repos/fzf-tab/fzf-tab.plugin.zsh
 fi
@@ -77,3 +80,6 @@ _git_worktree_paths() {
 }
 compdef _git_worktree_paths gws
 compdef _git_worktree_paths gwr
+
+# Obsidian
+export PATH="$PATH:/Applications/Obsidian.app/Contents/MacOS"
