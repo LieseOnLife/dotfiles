@@ -43,6 +43,7 @@ brew install diff-so-fancy    # Better git diff
 brew install git
 brew install vim
 brew install neovim
+brew install git-machete
 
 # Version managers
 brew install pyenv            # Python version management
@@ -63,7 +64,14 @@ brew install pre-commit       # Git hooks framework
 echo -e "\n${YELLOW}Installing cask applications...${NC}"
 
 # Terminal emulator
-brew install --cask iterm2
+## Check if iterm is installed
+if [[ ! -d /Applications/iTerm.app ]]; then
+    echo -e "${YELLOW}iterm2 not found. Installing iterm2...${NC}"
+    brew install --cask iterm2
+else
+    echo -e "${BLUE}→${NC} iterm2 already installed"
+fi
+#
 
 # Code editor
 brew install --cask visual-studio-code
