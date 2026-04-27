@@ -125,6 +125,16 @@ else
     echo -e "${BLUE}→${NC} iTerm2 not installed (skipping)"
 fi
 
+# Configure cmux
+echo -e "\n${YELLOW}Configuring cmux...${NC}"
+mkdir -p "$HOME/.config/cmux"
+create_symlink "$DOTFILES_DIR/cmux/settings.json" "$HOME/.config/cmux/settings.json"
+
+# Configure Ghostty (used by cmux for terminal rendering)
+echo -e "\n${YELLOW}Configuring Ghostty...${NC}"
+mkdir -p "$HOME/.config/ghostty"
+create_symlink "$DOTFILES_DIR/ghostty/config" "$HOME/.config/ghostty/config"
+
 echo -e "\n${GREEN}✓ Setup complete!${NC}"
 echo -e "${YELLOW}Note: Run './install_apps.sh' to install/update all required applications.${NC}"
 echo -e "${YELLOW}Restart your terminal or run 'source ~/.zshrc' to apply changes.${NC}"
