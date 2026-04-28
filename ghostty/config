@@ -1,0 +1,35 @@
+# Barbie Pink terminal theme
+
+# Background: deep magenta-black
+background = #1a0012
+
+# Foreground: soft pink-white
+foreground = #FFD6EC
+
+# Cursor: hot Barbie pink
+cursor-color = #FF1DCE
+
+# Selection highlight
+selection-background = #FF1DCE
+selection-foreground = #1a0012
+
+# 16-color ANSI palette — pink-shifted
+# Normal colors (0-7)
+palette = 0=#1a0012
+palette = 1=#FF1493
+palette = 2=#FF69B4
+palette = 3=#FF85C2
+palette = 4=#E91E8C
+palette = 5=#FF1DCE
+palette = 6=#FFB6D9
+palette = 7=#FFD6EC
+
+# Bright colors (8-15)
+palette = 8=#4d0033
+palette = 9=#FF1DCE
+palette = 10=#FF69B4
+palette = 11=#FFB6D9
+palette = 12=#FF1493
+palette = 13=#FF85C2
+palette = 14=#FFC0D9
+palette = 15=#FFFFFF
