@@ -23,9 +23,9 @@
 	<key>AggressiveFocusFollowsMouse</key>
 	<true/>
 	<key>AiMaxTokens</key>
-	<integer>400000</integer>
+	<integer>1050000</integer>
 	<key>AiModel</key>
-	<string>gpt-5.1</string>
+	<string>gpt-5.5</string>
 	<key>AiResponseMaxTokens</key>
 	<integer>128000</integer>
 	<key>AitermURL</key>
@@ -98,6 +98,8 @@
 	<integer>524288</integer>
 	<key>IRMemory</key>
 	<integer>4</integer>
+	<key>LeftTabBarWidth</key>
+	<real>238</real>
 	<key>LogDir</key>
 	<string>~/iterm_logs</string>
 	<key>NeverWarnAboutShortLivedSessions_DABB5778-FE14-4B9D-AFA2-A28A0B91BB8F</key>
@@ -1825,6 +1827,8 @@
 			<string>kNextWindowPointerAction</string>
 		</dict>
 	</dict>
+	<key>Print In Black And White</key>
+	<true/>
 	<key>ProbeForPassword</key>
 	<false/>
 	<key>QuitWhenAllWindowsClosed</key>
@@ -1845,6 +1849,8 @@
 	<integer>6</integer>
 	<key>TabTransform</key>
 	<integer>0</integer>
+	<key>TabViewType</key>
+	<integer>2</integer>
 	<key>VisualIndicatorForEsc</key>
 	<true/>
 	<key>WordCharacters</key>

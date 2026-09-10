@@ -5,6 +5,7 @@
 # Local config (not tracked) - contains email
 [include]
 	path = ~/.gitconfig.local
+	path = /Users/saje.liese/.config/datadog/git/config
 
 # Signing config (key must be global for dd-gitsign to work)
 [gpg]
@@ -25,6 +26,7 @@
 	insteadOf = https://github.com/
 [core]
 	excludesfile = ~/.gitignore_global
+	hooksPath = /usr/local/dd/global_hooks
 	# hooksPath = /path/to/your/hooks  # Optional: Add if you use global git hooks
 [pull] 
 	rebase = true
@@ -47,3 +49,22 @@
 	guess = false
 [fetch]
 	prune = true
+[maintenance]
+	repo = /private/var/folders/dd/qgtx22hj1sjfhdny5gd9snxc0000gp/T/trufflehog-15092-4008787332
+	repo = /private/var/folders/dd/qgtx22hj1sjfhdny5gd9snxc0000gp/T/trufflehog-24324-652023331
+	repo = /private/var/folders/dd/qgtx22hj1sjfhdny5gd9snxc0000gp/T/trufflehog-38537-325733958
+	repo = /private/var/folders/dd/qgtx22hj1sjfhdny5gd9snxc0000gp/T/trufflehog-40703-4050307382
+	repo = /private/var/folders/dd/qgtx22hj1sjfhdny5gd9snxc0000gp/T/trufflehog-49700-3800913950
+	repo = /private/var/folders/dd/qgtx22hj1sjfhdny5gd9snxc0000gp/T/trufflehog-63808-2739097062
+	repo = /private/var/folders/dd/qgtx22hj1sjfhdny5gd9snxc0000gp/T/trufflehog-73311-2167969239
+	repo = /private/var/folders/dd/qgtx22hj1sjfhdny5gd9snxc0000gp/T/trufflehog-83653-1826751776
+	repo = /private/var/folders/dd/qgtx22hj1sjfhdny5gd9snxc0000gp/T/trufflehog-97670-2843913734
+	repo = /private/var/folders/dd/qgtx22hj1sjfhdny5gd9snxc0000gp/T/trufflehog-13703-2384143321
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[datadog]
+	team = cloud-accounts

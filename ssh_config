@@ -1,3 +1,5 @@
+Include /Users/saje.liese/.config/datadog/git/ssh_config
+
 # BEGIN ANSIBLE MANAGED BLOCK
 Host *
 Compression yes

@@ -35,7 +35,7 @@ alias zsv="vi ~/repos/dotfiles/.vimrc"             # Edit vim config
 alias zsg="vi ~/repos/dotfiles/.gitconfig"         # Edit git config
 alias zsp="vi ~/repos/dotfiles/.p10k.zsh"          # Edit powerlevel10k config
 alias zssh="vi ~/repos/dotfiles/.ssh/config"       # Edit SSH config
-alias zsd="vi ~/repos/dotfiles/.zshrc_datadog"     # Edit Datadog config
+alias zsd="vi ~/.zshrc_datadog"     # Edit Datadog config
 
 # Reload config
 alias szs="source ~/.zshrc"         # Source/reload zsh config
@@ -50,7 +50,7 @@ alias poetry="scfw run poetry"
 ##################
 ### AI Shortcuts
 #################
-alias cl="claude"
+alias cl="claude --effort high"
 alias clmo="cl --model opus"
 
 
@@ -343,6 +343,7 @@ alias tfp="terraform plan"
 alias tfip="tfi && tfp"
 alias tfa="tf apply"
 alias tfia="tfi && tfa"
+alias tfiaa="tfi && tfa -auto-approve"
 alias tfpnc="tfp -no-color"
 alias tfat="terraform apply -target"
 alias tfcr="find ~/repos -type d -name .terraform -exec rm -rf {} \\;"
@@ -358,7 +359,7 @@ alias tft="tf test"
 
 # Terragrunt shortcuts
 alias tg="terragrunt"
-alias tgf="terragrunt hcl fmt"
+alias tgf="tg hcl fmt"
 alias tgg="tff && tgf"
 alias tgp="tg plan"
 alias tgpd="tgp --terragrunt-log-level debug --terragrunt-debug"
@@ -366,7 +367,7 @@ alias tgpp="tg plan 2> >(grep -v '\[terragrunt]' >&2)"
 alias tgs="tg state 2> >(grep -v '\[terragrunt]' >&2)"
 alias tgsm="tgs mv"
 alias tgsl="tgs list 2> >(grep -v '\[terragrunt]' >&2)"
-alias tga="terragrunt apply 2> >(grep -v '\[terragrunt]' >&2)"
+alias tga="tg apply 2> >(grep -v '\[terragrunt]' >&2)"
 alias tgapplyaa="tgapply -auto-approve"
 alias tgaa="tga -auto-approve"
 alias tgapplyall="terragrunt apply-all 2> >(grep -v '\[terragrunt]' >&2)"
