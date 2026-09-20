@@ -69,3 +69,6 @@ fi
 
 # Load Powerlevel10k configuration
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+
+# Created by `pipx` on 2026-05-07 00:51:14
+export PATH="$PATH:/Users/queen/.local/bin"
