@@ -497,7 +497,8 @@
   # DIR_PATTERN matches the logical $PWD, hence the ~/dd symlink path.
   typeset -g _MY_HUGE_REPO_PATTERN="$HOME/go/src/github.com/DataDog/dd-source(|-worktrees/*)"
   typeset -g POWERLEVEL9K_VCS_DISABLED_DIR_PATTERN="($HOME/go/src/github.com/DataDog|$HOME/dd)/dd-source(|/*|-worktrees/*)"
-  typeset -g POWERLEVEL9K_VCS_DISABLED_WORKDIR_PATTERN="~|${_MY_HUGE_REPO_PATTERN}"
+  # `~` only tilde-expands when it's the whole pattern, so spell out $HOME.
+  typeset -g POWERLEVEL9K_VCS_DISABLED_WORKDIR_PATTERN="$HOME|${_MY_HUGE_REPO_PATTERN}"
 
   # Disable the default Git status formatting.
   typeset -g POWERLEVEL9K_VCS_DISABLE_GITSTATUS_FORMATTING=true
@@ -1850,6 +1851,7 @@
     if [[ -f $dir/.git ]]; then
       gitdir=$(<$dir/.git)
       gitdir=${gitdir#gitdir: }
+      [[ $gitdir == /* ]] || gitdir=$dir/$gitdir
     else
       gitdir=$dir/.git
     fi
