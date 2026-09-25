@@ -36,6 +36,7 @@
     git_worktree            # git worktree indicator (custom)
     dir                     # current directory
     vcs                     # git status
+    git_branch_fast         # branch name only, for huge repos (custom)
     # =========================[ Line #2 ]=========================
     newline                 # \n
     # prompt_char           # prompt symbol
@@ -487,12 +488,16 @@
   # sagging, try setting POWERLEVEL9K_VCS_MAX_INDEX_SIZE_DIRTY to a number lower than the output
   # of `git ls-files | wc -l`. Alternatively, add `bash.showDirtyState = false` to the repository's
   # config: `git config bash.showDirtyState false`.
-  typeset -g POWERLEVEL9K_VCS_MAX_INDEX_SIZE_DIRTY=-1
+  typeset -g POWERLEVEL9K_VCS_MAX_INDEX_SIZE_DIRTY=100000
 
   # Don't show Git status in prompt for repositories whose workdir matches this pattern.
   # For example, if set to '~', the Git repository at $HOME/.git will be ignored.
   # Multiple patterns can be combined with '|': '~(|/foo)|/bar/baz/*'.
-  typeset -g POWERLEVEL9K_VCS_DISABLED_WORKDIR_PATTERN='~'
+  # gitstatusd takes 30s+ in dd-source and blocks the next repo's query, so skip it there.
+  # DIR_PATTERN matches the logical $PWD, hence the ~/dd symlink path.
+  typeset -g _MY_HUGE_REPO_PATTERN="$HOME/go/src/github.com/DataDog/dd-source(|-worktrees/*)"
+  typeset -g POWERLEVEL9K_VCS_DISABLED_DIR_PATTERN="($HOME/go/src/github.com/DataDog|$HOME/dd)/dd-source(|/*|-worktrees/*)"
+  typeset -g POWERLEVEL9K_VCS_DISABLED_WORKDIR_PATTERN="~|${_MY_HUGE_REPO_PATTERN}"
 
   # Disable the default Git status formatting.
   typeset -g POWERLEVEL9K_VCS_DISABLE_GITSTATUS_FORMATTING=true
@@ -1830,6 +1835,37 @@
   # Git worktree segment styling
   typeset -g POWERLEVEL9K_GIT_WORKTREE_FOREGROUND=255  # White text
   typeset -g POWERLEVEL9K_GIT_WORKTREE_BACKGROUND=089  # Dark pink
+
+  ##########################[ git_branch_fast: branch for huge repos ]###########################
+  # Reads HEAD directly (no forks) where vcs is disabled by _MY_HUGE_REPO_PATTERN.
+  function prompt_git_branch_fast() {
+    emulate -L zsh
+    local dir=${PWD:A} gitdir head
+    while true; do
+      if [[ -e $dir/.git ]]; then break; fi
+      [[ $dir == / ]] && return
+      dir=${dir:h}
+    done
+    [[ $dir == ${~_MY_HUGE_REPO_PATTERN} ]] || return
+    if [[ -f $dir/.git ]]; then
+      gitdir=$(<$dir/.git)
+      gitdir=${gitdir#gitdir: }
+    else
+      gitdir=$dir/.git
+    fi
+    [[ -r $gitdir/HEAD ]] || return
+    head=$(<$gitdir/HEAD)
+    if [[ $head == 'ref: refs/heads/'* ]]; then
+      head=${head#ref: refs/heads/}
+    else
+      head="@${head[1,8]}"
+    fi
+    p10k segment -b 213 -f 0 -t "${(g::)POWERLEVEL9K_VCS_BRANCH_ICON}${head//\%/%%}"
+  }
+
+  function instant_prompt_git_branch_fast() {
+    prompt_git_branch_fast
+  }
 
   # Transient prompt works similarly to the builtin transient_rprompt option. It trims down prompt
   # when accepting a command line. Supported values:
