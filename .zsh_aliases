@@ -53,7 +53,10 @@ alias poetry="scfw run poetry"
 alias cl="claude"
 alias clmo="cl --model opus"
 
-
+# Prevent idle system sleep while Pi is running (omp holds its own sleep assertion).
+pi() {
+  caffeinate -i /opt/homebrew/bin/pi "$@"
+}
 
 ###################
 ### Git Shortcuts
