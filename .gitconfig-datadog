@@ -2,7 +2,10 @@
 # This is loaded conditionally for repos in ~/dd/
 
 [user]
-	# signingkey inherited from global config
+	signingkey = ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAILMhYY5pjnyFKHolgFCU/hjrEu1x89Yma23OVdxju0xC
+
+[gpg "ssh"]
+	allowedSignersFile = ~/.config/git/datadog-allowed-signers
 
 # Local config (not tracked) - contains email
 [include]
@@ -17,3 +20,13 @@
 
 [core]
 	hooksPath = /usr/local/dd/global_hooks
+[url "https://saje-liese_ddog@github.com/"]
+	insteadOf = git@github.com:
+[url "https://saje-liese_ddog@github.com/ddoghq/"]
+	insteadOf = https://github.com/ddoghq/
+[url "https://saje-liese_ddog@github.com/DataDog/"]
+	insteadOf = https://github.com/DataDog/
+[credential "https://github.com"]
+	username = saje-liese_ddog
+	helper = 
+	helper = "!f() { if [ \"$1\" = get ]; then echo username=saje-liese_ddog; echo password=\"$(gh auth token --user saje-liese_ddog)\"; fi; }; f"

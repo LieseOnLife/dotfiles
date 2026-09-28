@@ -16,11 +16,13 @@
 [tag]
 	gpgsign = false
 
-# Datadog repo config (enables signing) - loaded conditionally
+# Datadog repo config (managed by git-config-tool) - loaded conditionally
 [includeIf "gitdir:~/dd/"]
-	path = ~/.gitconfig-datadog
+	path = ~/.config/datadog/git/config
 [includeIf "gitdir:~/go/src/github.com/DataDog/"]
-	path = ~/.gitconfig-datadog
+	path = ~/.config/datadog/git/config
+[includeIf "gitdir:~/go/src/github.com/ddoghq/"]
+	path = ~/.config/datadog/git/config
 [url "git@github.com:"]
 	insteadOf = https://github.com/
 [core]
@@ -47,3 +49,11 @@
 	guess = false
 [fetch]
 	prune = true
+[credential "https://github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[credential "https://gist.github.com"]
+	helper = 
+	helper = !/opt/homebrew/bin/gh auth git-credential
+[datadog]
+	team = cloud-accounts
