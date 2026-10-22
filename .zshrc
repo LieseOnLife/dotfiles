@@ -15,6 +15,9 @@ elif [[ -f /usr/local/bin/brew ]]; then
   eval "$(/usr/local/bin/brew shellenv)"
 fi
 
+# User-installed binaries (claude, omp, open-gov)
+export PATH="$HOME/.local/bin:$PATH"
+
 ###################
 ### Oh My Zsh Configuration
 ###################
