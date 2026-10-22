@@ -23,6 +23,9 @@
 	path = ~/.config/datadog/git/config
 [includeIf "gitdir:~/go/src/github.com/ddoghq/"]
 	path = ~/.config/datadog/git/config
+# Claude Code clones the ddoghq marketplace here; needs the ddoghq SSH routing
+[includeIf "gitdir:~/.claude/plugins/"]
+	path = ~/.config/datadog/git/config
 [url "git@github.com:"]
 	insteadOf = https://github.com/
 [core]
