@@ -38,12 +38,14 @@ Replacing standard Unix tools with modern alternatives:
 - **iTerm2 auto-sync** - Terminal settings automatically sync with dotfiles repo
 
 ### Organized Configuration
+- `.zshenv` - Environment variables for every zsh (PATH, GOPATH, EDITOR, history)
 - `.zshrc` - Core Zsh configuration
 - `.zsh_aliases` - All command aliases (Git, K8s, Terraform, GCP, etc.)
 - `.zsh_functions` - Custom shell functions (including smart git helpers)
 - `.zsh_integrations` - Tool integrations (pyenv, kubectl, aws, etc.)
 - `.vimrc` - Vim configuration
 - `.gitconfig` - Git configuration with signing
+- `.gitignore_global` - Global git ignores (Bazel outputs, Terraform lock files, venvs, `.planning/`)
 - `.p10k.zsh` - Powerlevel10k theme settings
 - `ssh_config` - SSH configuration
 - `iterm2/` - iTerm2 preferences (auto-synced)
@@ -223,11 +225,13 @@ Remember to update your email and signing key.
 dotfiles/
 ├── .gitconfig              # Git configuration
 ├── .gitignore             # Git ignore for dotfiles repo
+├── .gitignore_global      # Global git ignores (core.excludesfile)
 ├── .p10k.zsh              # Powerlevel10k theme configuration
 ├── .vimrc                 # Vim configuration
 ├── .zsh_aliases           # All shell aliases
 ├── .zsh_functions         # Custom shell functions
 ├── .zsh_integrations      # Tool integrations (pyenv, kubectl, etc.)
+├── .zshenv                # Environment variables (all zsh instances)
 ├── .zshrc                 # Main Zsh configuration
 ├── install_apps.sh        # Homebrew application installer
 ├── README.md              # This file

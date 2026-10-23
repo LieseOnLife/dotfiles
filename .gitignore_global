@@ -1,0 +1,21 @@
+.idea
+.ijwb
+bazel-bin
+bazel-out
+bazel-testlogs
+
+# Repos
+bazel-cnab-tools
+bazel-cloud-inventory
+
+# Terraform
+.terraform.lock.hcl
+
+# Python
+venv
+__pycache__
+
+# Claude
+.planning/
+
+**/.claude/settings.local.json
