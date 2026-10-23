@@ -77,12 +77,14 @@ fi
 # Create symlinks for dotfiles
 echo -e "\n${YELLOW}Creating/checking symlinks...${NC}"
 
+create_symlink "$DOTFILES_DIR/.zshenv" "$HOME/.zshenv"
 create_symlink "$DOTFILES_DIR/.zshrc" "$HOME/.zshrc"
 create_symlink "$DOTFILES_DIR/.zsh_aliases" "$HOME/.zsh_aliases"
 create_symlink "$DOTFILES_DIR/.zsh_functions" "$HOME/.zsh_functions"
 create_symlink "$DOTFILES_DIR/.zsh_integrations" "$HOME/.zsh_integrations"
 create_symlink "$DOTFILES_DIR/.vimrc" "$HOME/.vimrc"
 create_symlink "$DOTFILES_DIR/.gitconfig" "$HOME/.gitconfig"
+create_symlink "$DOTFILES_DIR/.gitignore_global" "$HOME/.gitignore_global"
 create_symlink "$DOTFILES_DIR/.gitconfig-datadog" "$HOME/.gitconfig-datadog"
 create_symlink "$DOTFILES_DIR/.p10k.zsh" "$HOME/.p10k.zsh"
 
