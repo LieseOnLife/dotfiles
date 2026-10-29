@@ -4,6 +4,7 @@
 # Machine-local and untracked; enter ~/.zshrc_datadog_ansible at the laptop-ansible
 # "path to your shell config file" prompt so re-runs update that file, not this one.
 [[ -s ~/.zshrc_datadog_ansible ]] && source ~/.zshrc_datadog_ansible
+export DATADOG_ROOT="${DATADOG_ROOT:-$HOME/dd}"
 
 # Machine-local secrets/values (AppGate profile URLs, ...). Untracked: this repo is public.
 [[ -s ~/.zshrc_datadog_local ]] && source ~/.zshrc_datadog_local
@@ -25,9 +26,10 @@ export PATH=$PATH:$HOME/.local/bin/cavmctl
 [ -f "$HOMEBREW_PREFIX/share/google-cloud-sdk/completion.zsh.inc" ] && source "$HOMEBREW_PREFIX/share/google-cloud-sdk/completion.zsh.inc"
 
 ## GitLab (only set GITLAB_TOKEN if it exists in keychain)
-if security find-generic-password -a ${USER} -s gitlab_token -w &>/dev/null; then
-    export GITLAB_TOKEN=$(security find-generic-password -a ${USER} -s gitlab_token -w)
+if _gitlab_token=$(security find-generic-password -a "$USER" -s gitlab_token -w 2>/dev/null); then
+    export GITLAB_TOKEN="$_gitlab_token"
 fi
+unset _gitlab_token
 alias gitlab='export GITLAB_TOKEN=$(security find-generic-password -a ${USER} -s gitlab_token -w)'
 alias gitlabl='ddtool auth gitlab login'
 
@@ -35,8 +37,8 @@ alias gitlabl='ddtool auth gitlab login'
 alias rapidctl="bzl run //domains/api_platform/apps/rapidctl --"
 
 ## AppGate (URLs come from ~/.zshrc_datadog_local)
-alias appgatedd='killall -9 "AppGate SDP" || true && open $DATADOG_APPGATE_URL'
-alias appgategov='killall -9 "AppGate SDP" || true && open $GOVCLOUD_APPGATE_URL'
+alias appgatedd='killall -9 "AppGate SDP" || true && open "$DATADOG_APPGATE_URL"'
+alias appgategov='killall -9 "AppGate SDP" || true && open "$GOVCLOUD_APPGATE_URL"'
 
 ## DD Exports
 # On demand: `ddtool auth token` can block on auth prompts, so never run it at shell startup.
@@ -128,7 +130,7 @@ awsconfigu() {
     $DATADOG_ROOT/devtools/bin/setup-awsconfig $(whoami) > ~/.aws/config
 }
 
-alias awsconfigug="$DATADOG_ROOT/devtools/bin/setup-awsconfig $(whoami) --from-gov >> ~/.aws/config"
+alias awsconfigug='"$DATADOG_ROOT/devtools/bin/setup-awsconfig" "$(whoami)" --from-gov >> ~/.aws/config'
 
 ## GovCloud
 alias awsgenv="export VAULT_ADDR=https://vault.us1.fed.dog"
@@ -173,8 +175,8 @@ alias vlg="export VAULT_ADDR=https://vault.us1.fed.dog && vl"
 alias vlb='export VAULT_ADDR=https://vault.us1.ddbuild.io && vl > /dev/null 2>&1 && export VAULT_TOKEN=$(vault print token)'
 
 ## Python / cloud-inventory
-alias pvenv="source $DATADOG_ROOT/cloud-inventory/venv/bin/activate"
-export PYTHONPATH="${PYTHONPATH}:$DATADOG_ROOT/cloud-inventory/scripts/simpleInterpolator"
+alias pvenv='source "$DATADOG_ROOT/cloud-inventory/venv/bin/activate"'
+export PYTHONPATH="${PYTHONPATH:+${PYTHONPATH}:}$DATADOG_ROOT/cloud-inventory/scripts/simpleInterpolator"
 
 ## Bazel
 alias brg="br :gazelle"
@@ -239,10 +241,10 @@ vod() {
 }
 
 ## devops hotfix
-export DEVOPS_WORKDIR="~/devenv/devops"
+export DEVOPS_WORKDIR="$HOME/devenv/devops"
 
 function devopstime() {
-    cd $DEVOPS_WORKDIR
+    cd "$DEVOPS_WORKDIR" || return
     git checkout prod
     git pull
     HOTFIXLINK="https://github.com/DataDog/devops/compare/$(git describe --abbrev=0 --tags)...prod"
