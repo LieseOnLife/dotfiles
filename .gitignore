@@ -21,5 +21,6 @@
 *~
 
 # Local machine-specific files (not tracked in this repo)
-.zshrc_datadog
+.zshrc_datadog_ansible
+.zshrc_datadog_local
 .zshrc_local

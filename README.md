@@ -43,6 +43,7 @@ Replacing standard Unix tools with modern alternatives:
 - `.zsh_aliases` - All command aliases (Git, K8s, Terraform, GCP, etc.)
 - `.zsh_functions` - Custom shell functions (including smart git helpers)
 - `.zsh_integrations` - Tool integrations (pyenv, kubectl, aws, etc.)
+- `.zshrc_datadog` - Datadog aliases and functions (repo nav, ddtool/JIT, aws-vault, GovCloud, vault, bazel)
 - `.vimrc` - Vim configuration
 - `.gitconfig` - Git configuration with signing
 - `.gitignore_global` - Global git ignores (Bazel outputs, Terraform lock files, venvs, `.planning/`)
@@ -233,6 +234,7 @@ dotfiles/
 ├── .zsh_integrations      # Tool integrations (pyenv, kubectl, etc.)
 ├── .zshenv                # Environment variables (all zsh instances)
 ├── .zshrc                 # Main Zsh configuration
+├── .zshrc_datadog         # Datadog aliases and functions
 ├── install_apps.sh        # Homebrew application installer
 ├── README.md              # This file
 ├── setup.sh               # Automated setup script
@@ -251,7 +253,8 @@ dotfiles/
 - The setup is safe to run multiple times - it will skip already installed components
 - All config files are symlinked, so changes in your home directory will be reflected in the repo
 - Remember to set your Git email and signing key in `.gitconfig`
-- Datadog-specific configurations are loaded from `~/.zshrc_datadog` if present (not tracked in this repo)
+- Datadog laptop-ansible output lives in `~/.zshrc_datadog_ansible` (machine-local, not tracked); `.zshrc_datadog` sources it first. When re-running laptop-ansible, enter `~/.zshrc_datadog_ansible` at the shell config prompt.
+- Machine-local Datadog secrets/values (AppGate profile URLs) go in `~/.zshrc_datadog_local` (not tracked; this repo is public). `.zshrc_datadog` sources it.
 
 ### Smart Git Features
 - Git commands automatically detect whether your repo uses `main` or `master` as the default branch
