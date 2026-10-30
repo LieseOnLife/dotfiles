@@ -1,0 +1,230 @@
+# ~/.zshrc_datadog - Datadog-specific aliases and functions (tracked in dotfiles).
+
+# Datadog laptop-ansible block (homebrew, pyenv, GOPATH, DATADOG_ROOT, GOPROXY, ...).
+# Machine-local and untracked; enter ~/.zshrc_datadog_ansible at the laptop-ansible
+# "path to your shell config file" prompt so re-runs update that file, not this one.
+[[ -s ~/.zshrc_datadog_ansible ]] && source ~/.zshrc_datadog_ansible
+export DATADOG_ROOT="${DATADOG_ROOT:-$HOME/dd}"
+
+# Machine-local values, untracked because this repo is public: AppGate URLs, emails
+# (DD_EMAIL, DD_GOV_EMAIL), Azure IDs, and aliases/functions with internal hostnames
+# (vault logins, aikey, CNAB/vendify targets, CNAB dev env).
+[[ -s ~/.zshrc_datadog_local ]] && source ~/.zshrc_datadog_local
+
+#### Datadog ####
+
+## Packs (JIT) ##
+alias dd="ddtool"
+alias ddcj="dd cloud jit"
+alias ddcja='ddcj --pack aws-org-account-admins --add "$DD_EMAIL" --ttl 8h'
+alias ddcjg='ddcj --pack gcp-org-account-admins --add "$DD_EMAIL" --ttl 8h'
+alias pgaa="ddcjg && cal & caal"
+
+## cavmctl
+export PATH=$PATH:$HOME/.local/bin/cavmctl
+
+## gcloud SDK
+[ -f "$HOMEBREW_PREFIX/share/google-cloud-sdk/path.zsh.inc" ] && source "$HOMEBREW_PREFIX/share/google-cloud-sdk/path.zsh.inc"
+[ -f "$HOMEBREW_PREFIX/share/google-cloud-sdk/completion.zsh.inc" ] && source "$HOMEBREW_PREFIX/share/google-cloud-sdk/completion.zsh.inc"
+
+## GitLab (only set GITLAB_TOKEN if it exists in keychain)
+if _gitlab_token=$(security find-generic-password -a "$USER" -s gitlab_token -w 2>/dev/null); then
+    export GITLAB_TOKEN="$_gitlab_token"
+fi
+unset _gitlab_token
+alias gitlab='export GITLAB_TOKEN=$(security find-generic-password -a ${USER} -s gitlab_token -w)'
+alias gitlabl='ddtool auth gitlab login'
+
+## RAPID
+alias rapidctl="bzl run //domains/api_platform/apps/rapidctl --"
+
+## AppGate (URLs come from ~/.zshrc_datadog_local)
+alias appgatedd='killall -9 "AppGate SDP" || true && open "$DATADOG_APPGATE_URL"'
+alias appgategov='killall -9 "AppGate SDP" || true && open "$GOVCLOUD_APPGATE_URL"'
+
+## DD Exports
+export TO_STAGING_QUIET_ON_MERGE='false'
+export TO_STAGING_NOTIFY_BEFORE_MERGE='true'
+export GOOGLE_CLOUD_QUOTA_PROJECT=datadog-prod
+
+## Repo navigation
+alias cdd="cd ~/dd"
+alias cddg="cdd && cd dd-go"
+alias cdds="cdd && cd dd-source"
+alias cddsm="cdds && gsm"
+alias cdcn="cdd && cd cnab-tools"
+alias cdci="cdd && cd cloud-inventory"
+alias cdcim="cdci && gsm"
+alias cdcio="cdci && cd organizations"
+alias cdcis="cdcio && cd aws/sso/prod"
+alias cdcip="cdcio && cd gcp/datadoghq.com/projects"
+alias cdco="cdd && cd cloudops"
+alias cddc="cdd && cd datacenter-config"
+alias cdvc="cdd && cd vault-config"
+alias cdsso="cdci && cd organizations/aws/sso/prod"
+
+## ddtool
+alias ddt="ddtool"
+alias ddtc="ddt cloud"
+alias ddta="ddt cloud aws accounts"
+alias ddtag="ddt cloud aws accounts get"
+alias dt="ddtool"
+alias dtc="dt clusters"
+alias dtcu="dtc use"
+
+## kubectl (generic k/kg/kc/kcuc/... live in ~/.zsh_aliases)
+alias kgpc="k get pods -n rapid-compute"
+alias kng="kubectl config set-context --current --namespace=gds"
+alias kngp="kubectl config set-context --current --namespace=gds-prober"
+alias cdgds="cdds && cd domains/gds"
+
+gdst() {
+    k exec -it $1 -- zsh
+}
+
+klp() {
+    kubectl logs $1 gds-prober
+}
+
+## aws-vault
+alias av="aws-vault exec"
+alias avb="ava build-stable"
+alias avs="ava staging"
+alias avm="ava michelada"
+alias avms="ava michelada-staging"
+alias avbu="aws-vault exec sso-build-unstable-compute-admin -- zsh -l"
+alias avap="ava prod"
+alias awsd="av -- aws"
+alias avgb="aws-vault exec govcloud-us1-build-fed-human-admin -- zsh -l"
+
+ava() {
+    aws-vault exec sso-$1-account-admin -- zsh -l
+}
+
+avp() {
+    aws-vault exec sso-$1-power-user -- zsh -l
+}
+
+avo() {
+    aws-vault exec sso-$1-org-admin -- zsh -l
+}
+
+avoo() {
+    aws-vault exec sso-$1-organizations-admin -- zsh -l
+}
+
+avr() {
+    aws-vault exec sso-$1-resources-admin -- zsh -l
+}
+
+avaa() {
+    aws-vault exec $1-account-admin -- zsh -l
+}
+
+awsconfigu() {
+    brew update && brew upgrade ddtool
+    cp ~/.aws/config ~/.aws/config.backup.backup$(date +"%m-%d-%Y")
+    cd $DATADOG_ROOT/devtools && git pull && cd -
+    $DATADOG_ROOT/devtools/bin/setup-awsconfig $(whoami) > ~/.aws/config
+}
+
+alias awsconfigug='"$DATADOG_ROOT/devtools/bin/setup-awsconfig" "$(whoami)" --from-gov >> ~/.aws/config'
+
+## GovCloud
+# awsgenv (GovCloud VAULT_ADDR) lives in ~/.zshrc_datadog_local
+alias awsgs="ava govcloud-us1-security-fed"
+alias awsgf="ava govcloud-us1-fed"
+alias awss="ava govcloud-us1-staging-fed"
+alias awsgm="ava govcloud-us1-master-fed"
+alias awsms="ava govcloud-us1-master-staging-fed"
+alias awsgcm="ava commercial-us1-master-fed"
+alias awsge="ava govcloud-us1-enclave-fed"
+alias awsgc="ava commercial-us1-fed"
+alias awsgb="ava govcloud-us1-build-fed"
+alias awsgi="ava govcloud-us1-gds-infra"
+alias awsgg="ava govcloud-us1-gds-prod-fed"
+alias gcpg='export GOOGLE_APPLICATION_CREDENTIALS=~/.config/gcloud/legacy_credentials/$DD_GOV_EMAIL/adc.json'
+alias gcpc='export GOOGLE_APPLICATION_CREDENTIALS=~/.config/gcloud/legacy_credentials/$DD_EMAIL/adc.json'
+
+## Azure
+alias azl='az login --tenant "$DD_AZURE_TENANT" --output none && az account set --subscription "$DD_AZURE_SUBSCRIPTION_ID"'
+
+## GCP
+gsl() {
+    gcloud services list --project ${1} | sed "s/\..*$//"
+}
+
+## Security logs forwarder API keys
+alias ddapikey="export SEC_DD_API_KEY=\$(aws-vault exec sso-xuxu-account-admin -- aws ssm get-parameter --name security-logs-forwarder.dd-api-key --with-decryption | jq \".Parameter.Value\" | tr -d '\"')"
+alias ddapikeys="export SEC_SANDBOX_DD_API_KEY=\$(aws-vault exec sso-xuxu-account-admin -- aws ssm get-parameter --name security-logs-forwarder.dd-api-key.datadog-sandbox --with-decryption | jq \".Parameter.Value\" | tr -d '\"')"
+
+gcpddk() {
+    export SEC_DD_API_KEY=$(aws-vault exec sso-xuxu-account-admin -- aws ssm get-parameter --name security-logs-forwarder.dd-api-key --with-decryption | jq ".Parameter.Value" | tr -d '"')
+    export SEC_SANDBOX_DD_API_KEY=$(aws-vault exec sso-xuxu-account-admin -- aws ssm get-parameter --name security-logs-forwarder.dd-api-key.datadog-sandbox --with-decryption | jq ".Parameter.Value" | tr -d '"')
+}
+
+## Vault (per-cluster vl* logins live in ~/.zshrc_datadog_local)
+alias vl="v login -method=oidc"
+
+## Python / cloud-inventory
+alias pvenv='source "$DATADOG_ROOT/cloud-inventory/venv/bin/activate"'
+export PYTHONPATH="${PYTHONPATH:+${PYTHONPATH}:}$DATADOG_ROOT/cloud-inventory/scripts/simpleInterpolator"
+
+## Bazel
+alias brg="br :gazelle"
+alias brs="br //:snapshot"
+alias bk='pkill -f "bazel" || true; pkill -f "bzl" || true; echo "Killed bazel/bzl processes"'
+
+## cloudops
+alias co="cloudops-cli"
+alias com="co modules"
+alias comu="com update"
+alias comuh="comu helpers"
+alias comuc="comu cloudsql"
+alias comi="com install"
+[ -f ~/.cloudops-cli.completion ] && source ~/.cloudops-cli.completion
+
+## CNAB (example-bundle targets and bzl-dev live in ~/.zshrc_datadog_local)
+brgo() {
+    bzl run $1 -- --driver docker --credential-file stateFileCredentials=#{gcp} --credential-file providerCredentials=#{gcp}
+}
+
+export AWSCREDS="govcloud-us1-fed-human-admin"
+alias awscg="export AWSCREDS=govcloud-us1-fed-human-admin"
+
+bra() {
+    bzl run $1 -- $2 --driver docker --credential-file stateFileCredentials=#{$AWSCREDS} --credential-file providerCredentials=#{$AWSCREDS}
+}
+
+brpgv() {
+    bzl run $1 --define dd_env=gov -- plan --driver docker --credential-file stateFileCredentials=#{$AWSCREDS} --credential-file providerCredentials=#{$AWSCREDS}
+}
+
+## CAVM / Vendify (worker deploy targets, vci, vod live in ~/.zshrc_datadog_local)
+alias brvts="br //domains/compute/apps/vendify-trex/config/k8s:staging"
+alias brvtp="br //domains/compute/apps/vendify-trex/config/k8s:prod"
+
+## devops hotfix
+export DEVOPS_WORKDIR="$HOME/devenv/devops"
+
+function devopstime() {
+    cd "$DEVOPS_WORKDIR" || return
+    git checkout prod
+    git pull
+    HOTFIXLINK="https://github.com/DataDog/devops/compare/$(git describe --abbrev=0 --tags)...prod"
+    echo -n $HOTFIXLINK | pbcopy
+    echo "$HOTFIXLINK copied to clipboard"
+    open $HOTFIXLINK
+    cd -
+}
+
+## CNAB dev env (`de` endpoints live in ~/.zshrc_datadog_local)
+alias mde="make devenv"
+alias mded="make devenv-destroy"
+alias cnmde="cdcn && mde"
+
+devenv-logs() {
+    local devenv_pod_name=$(kubectl get po --all-namespaces | ruby -e 'puts gets("")[/cnab-api-dev-saje-liese\S*/]')
+    echo "Finding logs for $devenv_pod_name..."
+    kubectl logs $devenv_pod_name --namespace=delivery-platform --container=main
+}
