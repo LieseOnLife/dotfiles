@@ -6,7 +6,9 @@
 [[ -s ~/.zshrc_datadog_ansible ]] && source ~/.zshrc_datadog_ansible
 export DATADOG_ROOT="${DATADOG_ROOT:-$HOME/dd}"
 
-# Machine-local secrets/values (AppGate profile URLs, ...). Untracked: this repo is public.
+# Machine-local values, untracked because this repo is public: AppGate URLs, emails
+# (DD_EMAIL, DD_GOV_EMAIL), Azure IDs, and aliases/functions with internal hostnames
+# (vault logins, aikey, CNAB/vendify targets, CNAB dev env).
 [[ -s ~/.zshrc_datadog_local ]] && source ~/.zshrc_datadog_local
 
 #### Datadog ####
@@ -14,8 +16,8 @@ export DATADOG_ROOT="${DATADOG_ROOT:-$HOME/dd}"
 ## Packs (JIT) ##
 alias dd="ddtool"
 alias ddcj="dd cloud jit"
-alias ddcja="ddcj --pack aws-org-account-admins --add saje.liese@datadoghq.com --ttl 8h"
-alias ddcjg="ddcj --pack gcp-org-account-admins --add saje.liese@datadoghq.com --ttl 8h"
+alias ddcja='ddcj --pack aws-org-account-admins --add "$DD_EMAIL" --ttl 8h'
+alias ddcjg='ddcj --pack gcp-org-account-admins --add "$DD_EMAIL" --ttl 8h'
 alias pgaa="ddcjg && cal & caal"
 
 ## cavmctl
@@ -41,10 +43,6 @@ alias appgatedd='killall -9 "AppGate SDP" || true && open "$DATADOG_APPGATE_URL"
 alias appgategov='killall -9 "AppGate SDP" || true && open "$GOVCLOUD_APPGATE_URL"'
 
 ## DD Exports
-# On demand: `ddtool auth token` can block on auth prompts, so never run it at shell startup.
-aikey() {
-    export DD_AI_GATEWAY_API_KEY="$(ddtool auth token rapid-ai-devx --datacenter us1.prod.dog)"
-}
 export TO_STAGING_QUIET_ON_MERGE='false'
 export TO_STAGING_NOTIFY_BEFORE_MERGE='true'
 export GOOGLE_CLOUD_QUOTA_PROJECT=datadog-prod
@@ -53,7 +51,7 @@ export GOOGLE_CLOUD_QUOTA_PROJECT=datadog-prod
 alias cdd="cd ~/dd"
 alias cddg="cdd && cd dd-go"
 alias cdds="cdd && cd dd-source"
-alias cddsm="cdds && gsmm"
+alias cddsm="cdds && gsm"
 alias cdcn="cdd && cd cnab-tools"
 alias cdci="cdd && cd cloud-inventory"
 alias cdcim="cdci && gsm"
@@ -133,7 +131,7 @@ awsconfigu() {
 alias awsconfigug='"$DATADOG_ROOT/devtools/bin/setup-awsconfig" "$(whoami)" --from-gov >> ~/.aws/config'
 
 ## GovCloud
-alias awsgenv="export VAULT_ADDR=https://vault.us1.fed.dog"
+# awsgenv (GovCloud VAULT_ADDR) lives in ~/.zshrc_datadog_local
 alias awsgs="ava govcloud-us1-security-fed"
 alias awsgf="ava govcloud-us1-fed"
 alias awss="ava govcloud-us1-staging-fed"
@@ -145,11 +143,11 @@ alias awsgc="ava commercial-us1-fed"
 alias awsgb="ava govcloud-us1-build-fed"
 alias awsgi="ava govcloud-us1-gds-infra"
 alias awsgg="ava govcloud-us1-gds-prod-fed"
-alias gcpg="export GOOGLE_APPLICATION_CREDENTIALS=~/.config/gcloud/legacy_credentials/saje.liese@ddog-gov.com/adc.json"
-alias gcpc="export GOOGLE_APPLICATION_CREDENTIALS=~/.config/gcloud/legacy_credentials/saje.liese@datadoghq.com/adc.json"
+alias gcpg='export GOOGLE_APPLICATION_CREDENTIALS=~/.config/gcloud/legacy_credentials/$DD_GOV_EMAIL/adc.json'
+alias gcpc='export GOOGLE_APPLICATION_CREDENTIALS=~/.config/gcloud/legacy_credentials/$DD_EMAIL/adc.json'
 
 ## Azure
-alias azl="az login --tenant datadoghq.onmicrosoft.com --output none && az account set --subscription '88d13348-0530-418a-89c0-9caa32d59037'"
+alias azl='az login --tenant "$DD_AZURE_TENANT" --output none && az account set --subscription "$DD_AZURE_SUBSCRIPTION_ID"'
 
 ## GCP
 gsl() {
@@ -165,14 +163,8 @@ gcpddk() {
     export SEC_SANDBOX_DD_API_KEY=$(aws-vault exec sso-xuxu-account-admin -- aws ssm get-parameter --name security-logs-forwarder.dd-api-key.datadog-sandbox --with-decryption | jq ".Parameter.Value" | tr -d '"')
 }
 
-## Vault
+## Vault (per-cluster vl* logins live in ~/.zshrc_datadog_local)
 alias vl="v login -method=oidc"
-alias vlp="export VAULT_ADDR=https://vault.us1.prod.dog && vl"
-alias vle="export VAULT_ADDR=https://vault.eu1.prod.dog && vl"
-alias vles="export VAULT_ADDR=https://vault.eu1.staging.dog && vl"
-alias vls="export VAULT_ADDR=https://vault.us1.staging.dog && vl"
-alias vlg="export VAULT_ADDR=https://vault.us1.fed.dog && vl"
-alias vlb='export VAULT_ADDR=https://vault.us1.ddbuild.io && vl > /dev/null 2>&1 && export VAULT_TOKEN=$(vault print token)'
 
 ## Python / cloud-inventory
 alias pvenv='source "$DATADOG_ROOT/cloud-inventory/venv/bin/activate"'
@@ -192,22 +184,9 @@ alias comuc="comu cloudsql"
 alias comi="com install"
 [ -f ~/.cloudops-cli.completion ] && source ~/.cloudops-cli.completion
 
-## CNAB
-alias brsp="bzl run //examples/bundles/terraform-s3:cnab-example-test.us1.staging.dog -- plan"
-alias brsa="bzl run //examples/bundles/terraform-s3:cnab-example-test.us1.staging.dog -- apply"
-alias brsi="bzl run //examples/bundles/terraform-s3:cnab-example-test.us1.staging.dog -- install"
-alias brsu="bzl run //examples/bundles/terraform-s3:cnab-example-test.us1.staging.dog -- uninstall"
-alias brbp="bzl run //examples/bundles/terraform-s3:cnab-example-test.us1.ddbuild.io -- plan"
-alias brba="bzl run //examples/bundles/terraform-s3:cnab-example-test.us1.ddbuild.io -- apply"
-alias brbi="bzl run //examples/bundles/terraform-s3:cnab-example-test.us1.ddbuild.io -- install"
-alias brbu="bzl run //examples/bundles/terraform-s3:cnab-example-test.us1.ddbuild.io -- uninstall"
-
+## CNAB (example-bundle targets and bzl-dev live in ~/.zshrc_datadog_local)
 brgo() {
     bzl run $1 -- --driver docker --credential-file stateFileCredentials=#{gcp} --credential-file providerCredentials=#{gcp}
-}
-
-bzl-dev() {
-    AUTH_ROLE=sdm-staging TEMPORAL_CERT_URL=https://vault.us1.ddbuild.io/v1/pki/regional/ca_chain TEMPORAL_ENDPOINT=temporal.atlas-dev.svc.sdm1.us1.ddbuild.io:8080 CNAB_WORKFLOW_DRIVER=temporal bzl run "$@"
 }
 
 export AWSCREDS="govcloud-us1-fed-human-admin"
@@ -221,24 +200,9 @@ brpgv() {
     bzl run $1 --define dd_env=gov -- plan --driver docker --credential-file stateFileCredentials=#{$AWSCREDS} --credential-file providerCredentials=#{$AWSCREDS}
 }
 
-## CAVM / Vendify
-alias brvas="br //domains/compute/apps/vendifyaws/config/k8s:deploy-vendifyaws-worker.rapid-compute.gizmo.us1.staging.dog"
-alias brvap="br //domains/compute/apps/vendifyaws/config/k8s:deploy-vendifyaws-worker.rapid-compute.build1.us1.ddbuild.io"
+## CAVM / Vendify (worker deploy targets, vci, vod live in ~/.zshrc_datadog_local)
 alias brvts="br //domains/compute/apps/vendify-trex/config/k8s:staging"
 alias brvtp="br //domains/compute/apps/vendify-trex/config/k8s:prod"
-alias cavmaa="for pr in \$(gh -R Datadog/cloud-inventory pr list -l cavm-auto-prs | awk '{print \$1}'); do echo \">>> validating and merging PR: \$pr\";gh -R Datadog/cloud-inventory pr review -a \$pr; gh -R Datadog/cloud-inventory pr merge -s \$pr;done"
-
-vci() {
-    grpcurl -insecure -H "x-datadog-target-release:vendify-trex.rapid-compute" -H "$(ddtool auth token rapid-compute --datacenter us1.staging.dog --http-header)" -d @ vendify-trex-api.us1.staging.dog:443 runtime.dna.terraform.executor.Executor/AddRepository <<EOM
-{
- "url": "https://github.com/DataDog/cloud-inventory"
-}
-EOM
-}
-
-vod() {
-    grpcurl -d "{\"account_id\": \"$1\", \"i_acknowledge_destructive_action\": \"true\"}" -H "$(ddtool auth token rapid-compute --datacenter us1.staging.dog --http-header)" -H x-datadog-target-release:vendify-orchestrator.rapid-compute -insecure localhost:8443 orchestratorpb.Orchestrator/DeleteAccount
-}
 
 ## devops hotfix
 export DEVOPS_WORKDIR="$HOME/devenv/devops"
@@ -254,8 +218,7 @@ function devopstime() {
     cd -
 }
 
-## CNAB dev env
-alias de="export GRAPHQL_ENDPOINT=https://cnab-api-staging.ddbuild.io/api && export CNAB_USE_KUBECLIENT=true && export CNAB_GRPC_ENDPOINT=cnab-api-dev-saje-liese.delivery-platform.general1.us1.ddbuild.io:8443"
+## CNAB dev env (`de` endpoints live in ~/.zshrc_datadog_local)
 alias mde="make devenv"
 alias mded="make devenv-destroy"
 alias cnmde="cdcn && mde"

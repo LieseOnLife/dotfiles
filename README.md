@@ -254,7 +254,7 @@ dotfiles/
 - All config files are symlinked, so changes in your home directory will be reflected in the repo
 - Remember to set your Git email and signing key in `.gitconfig`
 - Datadog laptop-ansible output lives in `~/.zshrc_datadog_ansible` (machine-local, not tracked); `.zshrc_datadog` sources it first. When re-running laptop-ansible, enter `~/.zshrc_datadog_ansible` at the shell config prompt.
-- Machine-local Datadog secrets/values (AppGate profile URLs) go in `~/.zshrc_datadog_local` (not tracked; this repo is public). `.zshrc_datadog` sources it.
+- Machine-local Datadog values go in `~/.zshrc_datadog_local` (not tracked; this repo is public): AppGate profile URLs, `DD_EMAIL`/`DD_GOV_EMAIL`, Azure tenant/subscription IDs, and aliases/functions that embed internal hostnames (vault logins, `aikey`, CNAB/vendify targets). `.zshrc_datadog` sources it before defining aliases; back it up separately.
 
 ### Smart Git Features
 - Git commands automatically detect whether your repo uses `main` or `master` as the default branch
